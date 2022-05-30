@@ -142,30 +142,16 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Resources\BOTW - Ready Go Start.wav">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
+    <Content Include="Resources\BOTW - Ready Go Start.wav" />
     <Content Include="Resources\ConTroll.ico">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Resources\OnlineStatusAvailable.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Resources\OnlineStatusAway.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Resources\OnlineStatusPresenting.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Resources\OnlineStatusUnknown.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Resources\Refresh.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Resources\Super Mario Kart - Time Trial Start.wav">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
+    <Content Include="Resources\OnlineStatusAvailable.png" />
+    <Content Include="Resources\OnlineStatusAway.png" />
+    <Content Include="Resources\OnlineStatusPresenting.png" />
+    <Content Include="Resources\OnlineStatusUnknown.png" />
+    <Content Include="Resources\Refresh.png" />
+    <Content Include="Resources\Super Mario Kart - Time Trial Start.wav" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SNIConnect\SNIConnect.csproj">
