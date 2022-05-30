@@ -174,7 +174,6 @@ namespace ConTroll
 
         private bool DoDistort(bool doReset = false)
         {
-            string header = _sni.GetROMHeader();
             if (!doReset && _sni != null && _sni.Devices.Count > 0)
             {
                 byte value = _sni.Read(0x7e0010);
