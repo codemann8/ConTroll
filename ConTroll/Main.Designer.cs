@@ -31,7 +31,7 @@ namespace ConTroll
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Main));
-            this.tabControl1 = new System.Windows.Forms.TabControl();
+            this.tabbarMain = new System.Windows.Forms.TabControl();
             this.tabMain = new System.Windows.Forms.TabPage();
             this.lblActivityDistortion = new System.Windows.Forms.Label();
             this.btnActivityDistortion = new System.Windows.Forms.Button();
@@ -43,6 +43,15 @@ namespace ConTroll
             this.dsSNIDevice = new System.Windows.Forms.BindingSource(this.components);
             this.tabConfig = new System.Windows.Forms.TabPage();
             this.grpDistortion = new System.Windows.Forms.GroupBox();
+            this.chkDistortShearY = new System.Windows.Forms.CheckBox();
+            this.chkDistortShearX = new System.Windows.Forms.CheckBox();
+            this.chkDistortScaleY = new System.Windows.Forms.CheckBox();
+            this.chkDistortScaleX = new System.Windows.Forms.CheckBox();
+            this.chkDistortZoom = new System.Windows.Forms.CheckBox();
+            this.chkDistortRotate = new System.Windows.Forms.CheckBox();
+            this.chkDistortMirrorY = new System.Windows.Forms.CheckBox();
+            this.chkDistortMirrorX = new System.Windows.Forms.CheckBox();
+            this.txtDistortInterval = new System.Windows.Forms.TextBox();
             this.lblDistortAdjustY = new System.Windows.Forms.Label();
             this.txtDistortAdjustY = new System.Windows.Forms.TextBox();
             this.lblDistortAdjustX = new System.Windows.Forms.Label();
@@ -63,17 +72,8 @@ namespace ConTroll
             this.lblOBSPassword = new System.Windows.Forms.Label();
             this.txtOBSPassword = new System.Windows.Forms.TextBox();
             this.dsOBSGameSource = new System.Windows.Forms.BindingSource(this.components);
-            this.label1 = new System.Windows.Forms.Label();
-            this.txtDistortInterval = new System.Windows.Forms.TextBox();
-            this.chkDistortMirrorX = new System.Windows.Forms.CheckBox();
-            this.chkDistortMirrorY = new System.Windows.Forms.CheckBox();
-            this.chkDistortRotate = new System.Windows.Forms.CheckBox();
-            this.chkDistortZoom = new System.Windows.Forms.CheckBox();
-            this.chkDistortScaleX = new System.Windows.Forms.CheckBox();
-            this.chkDistortScaleY = new System.Windows.Forms.CheckBox();
-            this.chkDistortShearX = new System.Windows.Forms.CheckBox();
-            this.chkDistortShearY = new System.Windows.Forms.CheckBox();
-            this.tabControl1.SuspendLayout();
+            this.lblDistortInterval = new System.Windows.Forms.Label();
+            this.tabbarMain.SuspendLayout();
             this.tabMain.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dsSNIDevice)).BeginInit();
             this.tabConfig.SuspendLayout();
@@ -84,16 +84,16 @@ namespace ConTroll
             ((System.ComponentModel.ISupportInitialize)(this.dsOBSGameSource)).BeginInit();
             this.SuspendLayout();
             // 
-            // tabControl1
+            // tabbarMain
             // 
-            this.tabControl1.Controls.Add(this.tabMain);
-            this.tabControl1.Controls.Add(this.tabConfig);
-            this.tabControl1.Controls.Add(this.tabConnection);
-            this.tabControl1.Location = new System.Drawing.Point(0, 0);
-            this.tabControl1.Name = "tabControl1";
-            this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(294, 216);
-            this.tabControl1.TabIndex = 0;
+            this.tabbarMain.Controls.Add(this.tabMain);
+            this.tabbarMain.Controls.Add(this.tabConfig);
+            this.tabbarMain.Controls.Add(this.tabConnection);
+            this.tabbarMain.Location = new System.Drawing.Point(0, 0);
+            this.tabbarMain.Name = "tabbarMain";
+            this.tabbarMain.SelectedIndex = 0;
+            this.tabbarMain.Size = new System.Drawing.Size(294, 216);
+            this.tabbarMain.TabIndex = 0;
             // 
             // tabMain
             // 
@@ -107,7 +107,7 @@ namespace ConTroll
             this.tabMain.Location = new System.Drawing.Point(4, 22);
             this.tabMain.Name = "tabMain";
             this.tabMain.Padding = new System.Windows.Forms.Padding(3);
-            this.tabMain.Size = new System.Drawing.Size(265, 190);
+            this.tabMain.Size = new System.Drawing.Size(286, 190);
             this.tabMain.TabIndex = 0;
             this.tabMain.Text = "Main";
             this.tabMain.UseVisualStyleBackColor = true;
@@ -167,7 +167,6 @@ namespace ConTroll
             this.btnDeviceRefresh.Size = new System.Drawing.Size(23, 23);
             this.btnDeviceRefresh.TabIndex = 1;
             this.btnDeviceRefresh.UseVisualStyleBackColor = true;
-            this.btnDeviceRefresh.Click += new System.EventHandler(this.btnDeviceRefresh_Click);
             // 
             // cboDevices
             // 
@@ -206,7 +205,7 @@ namespace ConTroll
             this.grpDistortion.Controls.Add(this.chkDistortRotate);
             this.grpDistortion.Controls.Add(this.chkDistortMirrorY);
             this.grpDistortion.Controls.Add(this.chkDistortMirrorX);
-            this.grpDistortion.Controls.Add(this.label1);
+            this.grpDistortion.Controls.Add(this.lblDistortInterval);
             this.grpDistortion.Controls.Add(this.txtDistortInterval);
             this.grpDistortion.Controls.Add(this.lblDistortAdjustY);
             this.grpDistortion.Controls.Add(this.txtDistortAdjustY);
@@ -222,6 +221,103 @@ namespace ConTroll
             this.grpDistortion.TabIndex = 2;
             this.grpDistortion.TabStop = false;
             this.grpDistortion.Text = "Social Distortion";
+            // 
+            // chkDistortShearY
+            // 
+            this.chkDistortShearY.AutoSize = true;
+            this.chkDistortShearY.Location = new System.Drawing.Point(156, 130);
+            this.chkDistortShearY.Name = "chkDistortShearY";
+            this.chkDistortShearY.Size = new System.Drawing.Size(92, 17);
+            this.chkDistortShearY.TabIndex = 31;
+            this.chkDistortShearY.Text = "Shear Vertical";
+            this.chkDistortShearY.UseVisualStyleBackColor = true;
+            this.chkDistortShearY.CheckedChanged += new System.EventHandler(this.chkDistortShearY_CheckedChanged);
+            // 
+            // chkDistortShearX
+            // 
+            this.chkDistortShearX.AutoSize = true;
+            this.chkDistortShearX.Location = new System.Drawing.Point(156, 114);
+            this.chkDistortShearX.Name = "chkDistortShearX";
+            this.chkDistortShearX.Size = new System.Drawing.Size(104, 17);
+            this.chkDistortShearX.TabIndex = 30;
+            this.chkDistortShearX.Text = "Shear Horizontal";
+            this.chkDistortShearX.UseVisualStyleBackColor = true;
+            this.chkDistortShearX.CheckedChanged += new System.EventHandler(this.chkDistortShearX_CheckedChanged);
+            // 
+            // chkDistortScaleY
+            // 
+            this.chkDistortScaleY.AutoSize = true;
+            this.chkDistortScaleY.Location = new System.Drawing.Point(156, 98);
+            this.chkDistortScaleY.Name = "chkDistortScaleY";
+            this.chkDistortScaleY.Size = new System.Drawing.Size(96, 17);
+            this.chkDistortScaleY.TabIndex = 29;
+            this.chkDistortScaleY.Text = "Squish Vertical";
+            this.chkDistortScaleY.UseVisualStyleBackColor = true;
+            this.chkDistortScaleY.CheckedChanged += new System.EventHandler(this.chkDistortScaleY_CheckedChanged);
+            // 
+            // chkDistortScaleX
+            // 
+            this.chkDistortScaleX.AutoSize = true;
+            this.chkDistortScaleX.Location = new System.Drawing.Point(156, 82);
+            this.chkDistortScaleX.Name = "chkDistortScaleX";
+            this.chkDistortScaleX.Size = new System.Drawing.Size(108, 17);
+            this.chkDistortScaleX.TabIndex = 28;
+            this.chkDistortScaleX.Text = "Squish Horizontal";
+            this.chkDistortScaleX.UseVisualStyleBackColor = true;
+            this.chkDistortScaleX.CheckedChanged += new System.EventHandler(this.chkDistortScaleX_CheckedChanged);
+            // 
+            // chkDistortZoom
+            // 
+            this.chkDistortZoom.AutoSize = true;
+            this.chkDistortZoom.Location = new System.Drawing.Point(156, 66);
+            this.chkDistortZoom.Name = "chkDistortZoom";
+            this.chkDistortZoom.Size = new System.Drawing.Size(65, 17);
+            this.chkDistortZoom.TabIndex = 27;
+            this.chkDistortZoom.Text = "Zoom In";
+            this.chkDistortZoom.UseVisualStyleBackColor = true;
+            this.chkDistortZoom.CheckedChanged += new System.EventHandler(this.chkDistortZoom_CheckedChanged);
+            // 
+            // chkDistortRotate
+            // 
+            this.chkDistortRotate.AutoSize = true;
+            this.chkDistortRotate.Location = new System.Drawing.Point(156, 50);
+            this.chkDistortRotate.Name = "chkDistortRotate";
+            this.chkDistortRotate.Size = new System.Drawing.Size(79, 17);
+            this.chkDistortRotate.TabIndex = 26;
+            this.chkDistortRotate.Text = "Rotate 180";
+            this.chkDistortRotate.UseVisualStyleBackColor = true;
+            this.chkDistortRotate.CheckedChanged += new System.EventHandler(this.chkDistortRotate_CheckedChanged);
+            // 
+            // chkDistortMirrorY
+            // 
+            this.chkDistortMirrorY.AutoSize = true;
+            this.chkDistortMirrorY.Location = new System.Drawing.Point(156, 34);
+            this.chkDistortMirrorY.Name = "chkDistortMirrorY";
+            this.chkDistortMirrorY.Size = new System.Drawing.Size(90, 17);
+            this.chkDistortMirrorY.TabIndex = 25;
+            this.chkDistortMirrorY.Text = "Mirror Vertical";
+            this.chkDistortMirrorY.UseVisualStyleBackColor = true;
+            this.chkDistortMirrorY.CheckedChanged += new System.EventHandler(this.chkDistortMirrorY_CheckedChanged);
+            // 
+            // chkDistortMirrorX
+            // 
+            this.chkDistortMirrorX.AutoSize = true;
+            this.chkDistortMirrorX.Location = new System.Drawing.Point(156, 18);
+            this.chkDistortMirrorX.Name = "chkDistortMirrorX";
+            this.chkDistortMirrorX.Size = new System.Drawing.Size(102, 17);
+            this.chkDistortMirrorX.TabIndex = 24;
+            this.chkDistortMirrorX.Text = "Mirror Horizontal";
+            this.chkDistortMirrorX.UseVisualStyleBackColor = true;
+            this.chkDistortMirrorX.CheckedChanged += new System.EventHandler(this.chkDistortMirrorX_CheckedChanged);
+            // 
+            // txtDistortInterval
+            // 
+            this.txtDistortInterval.ForeColor = System.Drawing.SystemColors.WindowText;
+            this.txtDistortInterval.Location = new System.Drawing.Point(83, 19);
+            this.txtDistortInterval.Name = "txtDistortInterval";
+            this.txtDistortInterval.Size = new System.Drawing.Size(56, 20);
+            this.txtDistortInterval.TabIndex = 0;
+            this.txtDistortInterval.TextChanged += new System.EventHandler(this.txtDistortInterval_TextChanged);
             // 
             // lblDistortAdjustY
             // 
@@ -326,7 +422,7 @@ namespace ConTroll
             this.tabConnection.Location = new System.Drawing.Point(4, 22);
             this.tabConnection.Name = "tabConnection";
             this.tabConnection.Padding = new System.Windows.Forms.Padding(3);
-            this.tabConnection.Size = new System.Drawing.Size(265, 190);
+            this.tabConnection.Size = new System.Drawing.Size(286, 190);
             this.tabConnection.TabIndex = 1;
             this.tabConnection.Text = "Connection";
             this.tabConnection.UseVisualStyleBackColor = true;
@@ -422,124 +518,28 @@ namespace ConTroll
             // 
             this.dsOBSGameSource.DataSource = typeof(OBSWebsocketDotNet.Types.SourceInfo);
             // 
-            // label1
+            // lblDistortInterval
             // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(33, 22);
-            this.label1.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(45, 13);
-            this.label1.TabIndex = 23;
-            this.label1.Text = "Interval:";
-            // 
-            // txtDistortInterval
-            // 
-            this.txtDistortInterval.ForeColor = System.Drawing.SystemColors.WindowText;
-            this.txtDistortInterval.Location = new System.Drawing.Point(83, 19);
-            this.txtDistortInterval.Name = "txtDistortInterval";
-            this.txtDistortInterval.Size = new System.Drawing.Size(56, 20);
-            this.txtDistortInterval.TabIndex = 0;
-            this.txtDistortInterval.TextChanged += new System.EventHandler(this.txtDistortInterval_TextChanged);
-            // 
-            // chkDistortMirrorX
-            // 
-            this.chkDistortMirrorX.AutoSize = true;
-            this.chkDistortMirrorX.Location = new System.Drawing.Point(156, 18);
-            this.chkDistortMirrorX.Name = "chkDistortMirrorX";
-            this.chkDistortMirrorX.Size = new System.Drawing.Size(102, 17);
-            this.chkDistortMirrorX.TabIndex = 24;
-            this.chkDistortMirrorX.Text = "Mirror Horizontal";
-            this.chkDistortMirrorX.UseVisualStyleBackColor = true;
-            this.chkDistortMirrorX.CheckedChanged += new System.EventHandler(this.chkDistortMirrorX_CheckedChanged);
-            // 
-            // chkDistortMirrorY
-            // 
-            this.chkDistortMirrorY.AutoSize = true;
-            this.chkDistortMirrorY.Location = new System.Drawing.Point(156, 34);
-            this.chkDistortMirrorY.Name = "chkDistortMirrorY";
-            this.chkDistortMirrorY.Size = new System.Drawing.Size(90, 17);
-            this.chkDistortMirrorY.TabIndex = 25;
-            this.chkDistortMirrorY.Text = "Mirror Vertical";
-            this.chkDistortMirrorY.UseVisualStyleBackColor = true;
-            this.chkDistortMirrorY.CheckedChanged += new System.EventHandler(this.chkDistortMirrorY_CheckedChanged);
-            // 
-            // chkDistortRotate
-            // 
-            this.chkDistortRotate.AutoSize = true;
-            this.chkDistortRotate.Location = new System.Drawing.Point(156, 50);
-            this.chkDistortRotate.Name = "chkDistortRotate";
-            this.chkDistortRotate.Size = new System.Drawing.Size(79, 17);
-            this.chkDistortRotate.TabIndex = 26;
-            this.chkDistortRotate.Text = "Rotate 180";
-            this.chkDistortRotate.UseVisualStyleBackColor = true;
-            this.chkDistortRotate.CheckedChanged += new System.EventHandler(this.chkDistortRotate_CheckedChanged);
-            // 
-            // chkDistortZoom
-            // 
-            this.chkDistortZoom.AutoSize = true;
-            this.chkDistortZoom.Location = new System.Drawing.Point(156, 66);
-            this.chkDistortZoom.Name = "chkDistortZoom";
-            this.chkDistortZoom.Size = new System.Drawing.Size(65, 17);
-            this.chkDistortZoom.TabIndex = 27;
-            this.chkDistortZoom.Text = "Zoom In";
-            this.chkDistortZoom.UseVisualStyleBackColor = true;
-            this.chkDistortZoom.CheckedChanged += new System.EventHandler(this.chkDistortZoom_CheckedChanged);
-            // 
-            // chkDistortScaleX
-            // 
-            this.chkDistortScaleX.AutoSize = true;
-            this.chkDistortScaleX.Location = new System.Drawing.Point(156, 82);
-            this.chkDistortScaleX.Name = "chkDistortScaleX";
-            this.chkDistortScaleX.Size = new System.Drawing.Size(108, 17);
-            this.chkDistortScaleX.TabIndex = 28;
-            this.chkDistortScaleX.Text = "Squish Horizontal";
-            this.chkDistortScaleX.UseVisualStyleBackColor = true;
-            this.chkDistortScaleX.CheckedChanged += new System.EventHandler(this.chkDistortScaleX_CheckedChanged);
-            // 
-            // chkDistortScaleY
-            // 
-            this.chkDistortScaleY.AutoSize = true;
-            this.chkDistortScaleY.Location = new System.Drawing.Point(156, 98);
-            this.chkDistortScaleY.Name = "chkDistortScaleY";
-            this.chkDistortScaleY.Size = new System.Drawing.Size(96, 17);
-            this.chkDistortScaleY.TabIndex = 29;
-            this.chkDistortScaleY.Text = "Squish Vertical";
-            this.chkDistortScaleY.UseVisualStyleBackColor = true;
-            this.chkDistortScaleY.CheckedChanged += new System.EventHandler(this.chkDistortScaleY_CheckedChanged);
-            // 
-            // chkDistortShearX
-            // 
-            this.chkDistortShearX.AutoSize = true;
-            this.chkDistortShearX.Location = new System.Drawing.Point(156, 114);
-            this.chkDistortShearX.Name = "chkDistortShearX";
-            this.chkDistortShearX.Size = new System.Drawing.Size(104, 17);
-            this.chkDistortShearX.TabIndex = 30;
-            this.chkDistortShearX.Text = "Shear Horizontal";
-            this.chkDistortShearX.UseVisualStyleBackColor = true;
-            this.chkDistortShearX.CheckedChanged += new System.EventHandler(this.chkDistortShearX_CheckedChanged);
-            // 
-            // chkDistortShearY
-            // 
-            this.chkDistortShearY.AutoSize = true;
-            this.chkDistortShearY.Location = new System.Drawing.Point(156, 130);
-            this.chkDistortShearY.Name = "chkDistortShearY";
-            this.chkDistortShearY.Size = new System.Drawing.Size(92, 17);
-            this.chkDistortShearY.TabIndex = 31;
-            this.chkDistortShearY.Text = "Shear Vertical";
-            this.chkDistortShearY.UseVisualStyleBackColor = true;
-            this.chkDistortShearY.CheckedChanged += new System.EventHandler(this.chkDistortShearY_CheckedChanged);
+            this.lblDistortInterval.AutoSize = true;
+            this.lblDistortInterval.Location = new System.Drawing.Point(33, 22);
+            this.lblDistortInterval.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.lblDistortInterval.Name = "lblDistortInterval";
+            this.lblDistortInterval.Size = new System.Drawing.Size(45, 13);
+            this.lblDistortInterval.TabIndex = 23;
+            this.lblDistortInterval.Text = "Interval:";
             // 
             // Main
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(294, 216);
-            this.Controls.Add(this.tabControl1);
+            this.Controls.Add(this.tabbarMain);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "Main";
             this.Text = "ConTroll";
             this.Load += new System.EventHandler(this.Main_Load);
-            this.tabControl1.ResumeLayout(false);
+            this.Shown += new System.EventHandler(this.Main_Shown);
+            this.tabbarMain.ResumeLayout(false);
             this.tabMain.ResumeLayout(false);
             this.tabMain.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dsSNIDevice)).EndInit();
@@ -559,7 +559,7 @@ namespace ConTroll
 
         #endregion
 
-        private System.Windows.Forms.TabControl tabControl1;
+        private System.Windows.Forms.TabControl tabbarMain;
         private System.Windows.Forms.TabPage tabMain;
         private System.Windows.Forms.TabPage tabConnection;
         private System.Windows.Forms.Label lblOBSPassword;
@@ -591,7 +591,6 @@ namespace ConTroll
         private System.Windows.Forms.TextBox txtDistortTilt;
         private System.Windows.Forms.Label lblDistortDuration;
         private System.Windows.Forms.TextBox txtDistortDuration;
-        private System.Windows.Forms.Label label1;
         private System.Windows.Forms.TextBox txtDistortInterval;
         private System.Windows.Forms.CheckBox chkDistortShearY;
         private System.Windows.Forms.CheckBox chkDistortShearX;
@@ -601,6 +600,7 @@ namespace ConTroll
         private System.Windows.Forms.CheckBox chkDistortRotate;
         private System.Windows.Forms.CheckBox chkDistortMirrorY;
         private System.Windows.Forms.CheckBox chkDistortMirrorX;
+        private System.Windows.Forms.Label lblDistortInterval;
     }
 }
 

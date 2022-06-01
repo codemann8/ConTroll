@@ -20,13 +20,45 @@ namespace ConTroll
         public Main()
         {
             InitializeComponent();
-
-            LoadSettings();
         }
 
         private void Main_Load(object sender, EventArgs e)
         {
+            LoadSettings();
+        }
+
+        private void Main_Shown(object sender, EventArgs e)
+        {
             AutoStartServices();
+
+            Task.Run(() => {
+                Dictionary<SNIClient.DeviceState, int> pingFreq = new Dictionary<SNIClient.DeviceState, int>()
+                {
+                    { SNIClient.DeviceState.SNIOffline, 1000 },
+                    { SNIClient.DeviceState.NoDevice, 1000 },
+                    { SNIClient.DeviceState.DeviceStandby, 200 },
+                    { SNIClient.DeviceState.DeviceRunning, 40 },
+                    { SNIClient.DeviceState.DeviceRunningLive, 16 }
+                };
+                int updateUIFreq = 200;
+                int counter = updateUIFreq + 1;
+                while (true)
+                {
+                    bool updateDevices = _sni.Status == SNIClient.DeviceState.SNIOffline || _sni.Status == SNIClient.DeviceState.NoDevice;
+                    _sni.UpdateCurrentState();
+                    if (counter > updateUIFreq)
+                    {
+                        counter = 0;
+                        this.BeginInvoke((MethodInvoker)(() =>
+                        {
+                            UpdateSNIStatus(updateDevices);
+                        }));
+                        Application.DoEvents();
+                    }
+                    counter += pingFreq[_sni.Status];
+                    System.Threading.Thread.Sleep(pingFreq[_sni.Status]);
+                }
+            });
         }
 
         private void LoadSettings()
@@ -53,6 +85,8 @@ namespace ConTroll
             {
                 txtSNIAddress.Text = SNIClient.GetLocalGrpcAddress();
             }
+
+            UpdateSNIClient();
 
             txtDistortInterval.Text = Properties.Settings.Default.DistortInterval.ToString();
             txtDistortDuration.Text = Properties.Settings.Default.DistortDuration.ToString();
@@ -82,7 +116,9 @@ namespace ConTroll
         public void AutoStartServices()
         {
             btnOBSStatus_Click(null, null);
-            btnDeviceRefresh_Click(null, null);
+
+            _distort = new DistortionActivity(this); 
+            _distort.Stop();
         }
 
         #region Form Control Events
@@ -144,6 +180,7 @@ namespace ConTroll
             }
 
             Properties.Settings.Default.Save();
+            UpdateSNIClient();
         }
 
         private void txtSNIAddress_Enter(object sender, EventArgs e)
@@ -252,27 +289,6 @@ namespace ConTroll
             Properties.Settings.Default.Save();
         }
 
-        private void btnDeviceRefresh_Click(object sender, EventArgs e)
-        {
-            if (Properties.Settings.Default.SNIAddress == "")
-            {
-                _sni = new SNIClient(SNIClient.DEFAULT_IP, SNIClient.GetGrpcPort());
-            }
-            else
-            {
-                string[] address = Properties.Settings.Default.SNIAddress.Split(':');
-                _sni = new SNIClient(address[0], int.Parse(address[1]));
-            }
-
-            _sni.Connect();
-
-            dsSNIDevice.Clear();
-            foreach (SNI.DevicesResponse.Types.Device d in _sni.Devices)
-            {
-                dsSNIDevice.Add(d);
-            }
-        }
-
         private void btnOBSStatus_Click(object sender, EventArgs e)
         {
             if (_obs != null && _obs.Status == OBSConnect.OBSStatus.Connected)
@@ -347,6 +363,75 @@ namespace ConTroll
         }
 
         #endregion
+
+        public void UpdateSNIClient()
+        {
+            if (Properties.Settings.Default.SNIAddress == "")
+            {
+                _sni = new SNIClient(SNIClient.DEFAULT_IP, SNIClient.GetGrpcPort());
+            }
+            else
+            {
+                string[] address = Properties.Settings.Default.SNIAddress.Split(':');
+                _sni = new SNIClient(address[address.Length - 2], int.Parse(address[address.Length - 1]));
+            }
+        }
+
+        public void UpdateSNIStatus(bool updateDevices)
+        {
+            if (updateDevices)
+            {
+                dsSNIDevice.Clear();
+
+                switch (_sni.Status)
+                {
+                    case SNIClient.DeviceState.SNIOffline:
+                        {
+                            SNI.DevicesResponse.Types.Device d = new SNI.DevicesResponse.Types.Device();
+                            d.DisplayName = "(disconnected)";
+                            dsSNIDevice.Add(d);
+                        }
+                        break;
+                    case SNIClient.DeviceState.NoDevice:
+                        {
+                            SNI.DevicesResponse.Types.Device d = new SNI.DevicesResponse.Types.Device();
+                            d.DisplayName = "(none found)";
+                            dsSNIDevice.Add(d);
+                        }
+                        break;
+                    default:
+                        foreach (SNI.DevicesResponse.Types.Device d in _sni.Devices)
+                        {
+                            dsSNIDevice.Add(d);
+                        }
+                        break;
+                }
+            }
+
+            Image img;
+            switch (_sni.Status)
+            {
+                case SNIClient.DeviceState.DeviceRunning:
+                case SNIClient.DeviceState.DeviceRunningLive:
+                    img = Properties.Resources.OnlineStatusAvailable;
+                    break;
+                case SNIClient.DeviceState.DeviceStandby:
+                    img = Properties.Resources.OnlineStatusAway;
+                    break;
+                case SNIClient.DeviceState.NoDevice:
+                    img = Properties.Resources.OnlineStatusPresenting;
+                    break;
+                default:
+                    img = Properties.Resources.OnlineStatusUnknown;
+                    break;
+            }
+
+            if (img != btnDeviceRefresh.Image)
+            {
+                btnDeviceRefresh.Image.Dispose();
+                btnDeviceRefresh.Image = img;
+            }
+        }
 
         public void UpdateOBSStatus()
         {

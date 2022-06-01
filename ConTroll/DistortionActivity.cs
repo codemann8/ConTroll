@@ -60,15 +60,30 @@ namespace ConTroll
 
         public bool CanDistort()
         {
-            if (_sni == null || _sni.Devices.Count == 0)
+            if (_sni == null || _sni.Status == SNIClient.DeviceState.SNIOffline || _sni.Status == SNIClient.DeviceState.NoDevice)
             {
                 MessageBox.Show("No devices are detected thru SNI", "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 return false;
             }
 
-            if (!_sni.GetROMHeader().EndsWith("O"))
+            if (_sni.Status == SNIClient.DeviceState.DeviceRunning || _sni.Status == SNIClient.DeviceState.DeviceRunningLive)
             {
-                MessageBox.Show("Incorrect ROM type detected. Currently only seeds generated from the OWR branch are compatible.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                string header = _sni.GetROMHeader();
+                if (header == "NO-ROM" || header.StartsWith("NO-CONF-"))
+                {
+                    MessageBox.Show("No ROM detected. If the ROM is loaded, try restarting SNI.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return false;
+                }
+                if (!header.EndsWith("O"))
+                {
+                    MessageBox.Show("Incorrect ROM type detected. Currently only seeds generated from the OWR branch are compatible.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                    return false;
+                }
+            }
+            else
+            {
+                MessageBox.Show("No ROM detected. If the ROM is loaded, try power-cycling the console and SNI.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return false;
             }
 
             if (_obs != null && _obs.Status != OBSConnect.OBSStatus.Connected)
@@ -132,12 +147,17 @@ namespace ConTroll
             IsCancelPending = true;
             Task.Run(() =>
             {
+                if (Status == DistortStatus.Stopped)
+                {
+                    DoDistort(true);
+                    return;
+                }
+
                 while (Status != DistortStatus.Running)
                 {
                     System.Threading.Thread.Sleep(100);
                 }
 
-                DoDistort(true);
                 Status = DistortStatus.Stopped;
                 UpdateDistortStatus();
             });
@@ -170,20 +190,33 @@ namespace ConTroll
                 Status = DistortStatus.Busy;
                 UpdateDistortStatus();
             }
+
+            DoDistort(true);
+
+            Status = DistortStatus.Stopped;
+            UpdateDistortStatus();
         }
 
         private bool DoDistort(bool doReset = false)
         {
-            if (!doReset && _sni != null && _sni.Devices.Count > 0)
+            if (!doReset && _sni != null)
             {
-                byte value = _sni.Read(0x7e0010);
-                if (value == 0x19 || value == 0x1a)
+                switch (_sni.Status)
                 {
-                    return false;
+                    case SNIClient.DeviceState.DeviceRunning:
+                        byte value = _sni.Read(0x7e0010);
+                        if (value == 0x19 || value == 0x1a)
+                        {
+                            return false;
+                        }
+                        break;
+                    case SNIClient.DeviceState.SNIOffline:
+                    case SNIClient.DeviceState.NoDevice:
+                        return false;
                 }
             }
 
-            if (doReset)
+            if (doReset || _sni.Status == SNIClient.DeviceState.DeviceStandby)
             {
                 //add filters if they don't exist
                 try
@@ -352,7 +385,7 @@ namespace ConTroll
             _obs._obs.SetSourceFilterVisibility(Properties.Settings.Default.OBSGameSource, DISTORT_MOVE_FILTER, true);
 
             //change inputs
-            if (_sni != null && _sni.Devices.Count > 0)
+            if (_sni != null && (_sni.Status == SNIClient.DeviceState.DeviceRunning || _sni.Status == SNIClient.DeviceState.DeviceRunningLive))
             {
                 bool InputsFlippedLR = MirrorModeFlippedY ^ MirrorModeRotated;
                 bool InputsFlippedUD = MirrorModeFlippedX ^ MirrorModeRotated;
