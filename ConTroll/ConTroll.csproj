@@ -55,6 +55,9 @@
     <ErrorReport>prompt</ErrorReport>
     <Prefer32Bit>true</Prefer32Bit>
   </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>ConTroll.ico</ApplicationIcon>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="Google.Protobuf, Version=3.21.1.0, Culture=neutral, PublicKeyToken=a7d26565bac4d604, processorArchitecture=MSIL">
       <HintPath>..\packages\Google.Protobuf.3.21.1\lib\net45\Google.Protobuf.dll</HintPath>
@@ -145,10 +148,9 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="ConTroll.ico" />
     <Content Include="Resources\BOTW - Ready Go Start.wav" />
-    <Content Include="Resources\ConTroll.ico">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
+    <Content Include="Resources\ConTroll.ico" />
     <Content Include="Resources\OnlineStatusAvailable.png" />
     <Content Include="Resources\OnlineStatusAway.png" />
     <Content Include="Resources\OnlineStatusPresenting.png" />
