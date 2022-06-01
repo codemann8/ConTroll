@@ -17,6 +17,7 @@ namespace ConTroll
         public SNIClient _sni;
         public OBSConnect _obs;
         public DistortionActivity _distort;
+
         public Main()
         {
             InitializeComponent();
@@ -32,6 +33,11 @@ namespace ConTroll
             AutoStartServices();
 
             Task.Run(() => {
+                if (System.Threading.Thread.CurrentThread.Name == null)
+                {
+                    System.Threading.Thread.CurrentThread.Name = "Status Monitor";
+                }
+
                 Dictionary<SNIClient.DeviceState, int> pingFreq = new Dictionary<SNIClient.DeviceState, int>()
                 {
                     { SNIClient.DeviceState.SNIOffline, 1000 },
@@ -361,6 +367,40 @@ namespace ConTroll
                 Properties.Settings.Default.Save();
             }
         }
+        private void btnSNIStatus_MouseHover(object sender, EventArgs e)
+        {
+            tooltip.ShowAlways = true;
+            tooltip.SetToolTip(stsMain, btnSNIStatus.ToolTipText);
+        }
+
+        private void btnSNIStatus_MouseLeave(object sender, EventArgs e)
+        {
+            tooltip.RemoveAll();
+        }
+
+        private void btnOBSStatus_MouseHover(object sender, EventArgs e)
+        {
+            tooltip.ShowAlways = true;
+            tooltip.SetToolTip(stsMain, btnOBSStatus.ToolTipText);
+        }
+
+        private void btnOBSStatus_MouseLeave(object sender, EventArgs e)
+        {
+            tooltip.RemoveAll();
+        }
+
+        private void btnActivityDistortion_Click(object sender, EventArgs e)
+        {
+            if (_distort != null && _distort.Status != DistortionActivity.DistortStatus.Stopped)
+            {
+                _distort.Stop();
+            }
+            else
+            {
+                _distort = new DistortionActivity(this);
+                _distort.Start();
+            }
+        }
 
         #endregion
 
@@ -413,23 +453,27 @@ namespace ConTroll
             {
                 case SNIClient.DeviceState.DeviceRunning:
                 case SNIClient.DeviceState.DeviceRunningLive:
+                    btnSNIStatus.ToolTipText = string.Format("Active ({0})", _sni.Devices[0].DisplayName);
                     img = Properties.Resources.OnlineStatusAvailable;
                     break;
                 case SNIClient.DeviceState.DeviceStandby:
+                    btnSNIStatus.ToolTipText = string.Format("Connected ({0})", _sni.Devices[0].DisplayName);
                     img = Properties.Resources.OnlineStatusAway;
                     break;
                 case SNIClient.DeviceState.NoDevice:
+                    btnSNIStatus.ToolTipText = "No Device";
                     img = Properties.Resources.OnlineStatusPresenting;
                     break;
                 default:
+                    btnSNIStatus.ToolTipText = "Disconnected";
                     img = Properties.Resources.OnlineStatusUnknown;
                     break;
             }
 
-            if (img != btnDeviceRefresh.Image)
+            if (img != btnSNIStatus.Image)
             {
-                btnDeviceRefresh.Image.Dispose();
-                btnDeviceRefresh.Image = img;
+                btnSNIStatus.Image.Dispose();
+                btnSNIStatus.Image = img;
             }
         }
 
@@ -439,13 +483,16 @@ namespace ConTroll
             switch (_obs.Status)
             {
                 case OBSConnect.OBSStatus.Connected:
+                    btnOBSStatus.ToolTipText = "Connected";
                     img = Properties.Resources.OnlineStatusAvailable;
                     break;
                 case OBSConnect.OBSStatus.AuthError:
                 case OBSConnect.OBSStatus.Error:
+                    btnOBSStatus.ToolTipText = "Error";
                     img = Properties.Resources.OnlineStatusPresenting;
                     break;
                 default:
+                    btnOBSStatus.ToolTipText = "Disconnected";
                     img = Properties.Resources.OnlineStatusUnknown;
                     break;
             }
@@ -454,19 +501,6 @@ namespace ConTroll
             {
                 btnOBSStatus.Image.Dispose();
                 btnOBSStatus.Image = img;
-            }
-        }
-
-        private void btnActivityDistortion_Click(object sender, EventArgs e)
-        {
-            if (_distort != null && _distort.Status != DistortionActivity.DistortStatus.Stopped)
-            {
-                _distort.Stop();
-            }
-            else
-            {
-                _distort = new DistortionActivity(this);
-                _distort.Start();
             }
         }
     }

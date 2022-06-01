@@ -35,12 +35,6 @@ namespace ConTroll
             this.tabMain = new System.Windows.Forms.TabPage();
             this.lblActivityDistortion = new System.Windows.Forms.Label();
             this.btnActivityDistortion = new System.Windows.Forms.Button();
-            this.lblOBSStatus = new System.Windows.Forms.Label();
-            this.btnOBSStatus = new System.Windows.Forms.Button();
-            this.lblDevices = new System.Windows.Forms.Label();
-            this.btnDeviceRefresh = new System.Windows.Forms.Button();
-            this.cboDevices = new System.Windows.Forms.ComboBox();
-            this.dsSNIDevice = new System.Windows.Forms.BindingSource(this.components);
             this.tabConfig = new System.Windows.Forms.TabPage();
             this.grpDistortion = new System.Windows.Forms.GroupBox();
             this.chkDistortShearY = new System.Windows.Forms.CheckBox();
@@ -51,6 +45,7 @@ namespace ConTroll
             this.chkDistortRotate = new System.Windows.Forms.CheckBox();
             this.chkDistortMirrorY = new System.Windows.Forms.CheckBox();
             this.chkDistortMirrorX = new System.Windows.Forms.CheckBox();
+            this.lblDistortInterval = new System.Windows.Forms.Label();
             this.txtDistortInterval = new System.Windows.Forms.TextBox();
             this.lblDistortAdjustY = new System.Windows.Forms.Label();
             this.txtDistortAdjustY = new System.Windows.Forms.TextBox();
@@ -64,24 +59,33 @@ namespace ConTroll
             this.cboOBSGameSource = new System.Windows.Forms.ComboBox();
             this.tabConnection = new System.Windows.Forms.TabPage();
             this.grpSNI = new System.Windows.Forms.GroupBox();
+            this.lblDevices = new System.Windows.Forms.Label();
+            this.cboDevices = new System.Windows.Forms.ComboBox();
+            this.dsSNIDevice = new System.Windows.Forms.BindingSource(this.components);
             this.lblSNIAddress = new System.Windows.Forms.Label();
             this.txtSNIAddress = new System.Windows.Forms.TextBox();
             this.grpOBSSettings = new System.Windows.Forms.GroupBox();
-            this.lblObsAddress = new System.Windows.Forms.Label();
+            this.lblOBSAddress = new System.Windows.Forms.Label();
             this.txtOBSAddress = new System.Windows.Forms.TextBox();
             this.lblOBSPassword = new System.Windows.Forms.Label();
             this.txtOBSPassword = new System.Windows.Forms.TextBox();
             this.dsOBSGameSource = new System.Windows.Forms.BindingSource(this.components);
-            this.lblDistortInterval = new System.Windows.Forms.Label();
+            this.stsMain = new System.Windows.Forms.StatusStrip();
+            this.btnSNIStatus = new System.Windows.Forms.ToolStripDropDownButton();
+            this.lblSNIStatus = new System.Windows.Forms.ToolStripStatusLabel();
+            this.btnOBSStatus = new System.Windows.Forms.ToolStripDropDownButton();
+            this.lblOBSStatus = new System.Windows.Forms.ToolStripStatusLabel();
+            this.tooltip = new System.Windows.Forms.ToolTip(this.components);
             this.tabbarMain.SuspendLayout();
             this.tabMain.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dsSNIDevice)).BeginInit();
             this.tabConfig.SuspendLayout();
             this.grpDistortion.SuspendLayout();
             this.tabConnection.SuspendLayout();
             this.grpSNI.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dsSNIDevice)).BeginInit();
             this.grpOBSSettings.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dsOBSGameSource)).BeginInit();
+            this.stsMain.SuspendLayout();
             this.SuspendLayout();
             // 
             // tabbarMain
@@ -99,11 +103,6 @@ namespace ConTroll
             // 
             this.tabMain.Controls.Add(this.lblActivityDistortion);
             this.tabMain.Controls.Add(this.btnActivityDistortion);
-            this.tabMain.Controls.Add(this.lblOBSStatus);
-            this.tabMain.Controls.Add(this.btnOBSStatus);
-            this.tabMain.Controls.Add(this.lblDevices);
-            this.tabMain.Controls.Add(this.btnDeviceRefresh);
-            this.tabMain.Controls.Add(this.cboDevices);
             this.tabMain.Location = new System.Drawing.Point(4, 22);
             this.tabMain.Name = "tabMain";
             this.tabMain.Padding = new System.Windows.Forms.Padding(3);
@@ -115,7 +114,7 @@ namespace ConTroll
             // lblActivityDistortion
             // 
             this.lblActivityDistortion.AutoSize = true;
-            this.lblActivityDistortion.Location = new System.Drawing.Point(3, 166);
+            this.lblActivityDistortion.Location = new System.Drawing.Point(5, 11);
             this.lblActivityDistortion.Name = "lblActivityDistortion";
             this.lblActivityDistortion.Size = new System.Drawing.Size(86, 13);
             this.lblActivityDistortion.TabIndex = 6;
@@ -124,63 +123,12 @@ namespace ConTroll
             // btnActivityDistortion
             // 
             this.btnActivityDistortion.Image = global::ConTroll.Properties.Resources.OnlineStatusUnknown;
-            this.btnActivityDistortion.Location = new System.Drawing.Point(95, 161);
+            this.btnActivityDistortion.Location = new System.Drawing.Point(97, 6);
             this.btnActivityDistortion.Name = "btnActivityDistortion";
             this.btnActivityDistortion.Size = new System.Drawing.Size(23, 23);
             this.btnActivityDistortion.TabIndex = 5;
             this.btnActivityDistortion.UseVisualStyleBackColor = true;
             this.btnActivityDistortion.Click += new System.EventHandler(this.btnActivityDistortion_Click);
-            // 
-            // lblOBSStatus
-            // 
-            this.lblOBSStatus.AutoSize = true;
-            this.lblOBSStatus.Location = new System.Drawing.Point(3, 38);
-            this.lblOBSStatus.Name = "lblOBSStatus";
-            this.lblOBSStatus.Size = new System.Drawing.Size(32, 13);
-            this.lblOBSStatus.TabIndex = 4;
-            this.lblOBSStatus.Text = "OBS:";
-            // 
-            // btnOBSStatus
-            // 
-            this.btnOBSStatus.Image = global::ConTroll.Properties.Resources.OnlineStatusUnknown;
-            this.btnOBSStatus.Location = new System.Drawing.Point(53, 33);
-            this.btnOBSStatus.Name = "btnOBSStatus";
-            this.btnOBSStatus.Size = new System.Drawing.Size(23, 23);
-            this.btnOBSStatus.TabIndex = 3;
-            this.btnOBSStatus.UseVisualStyleBackColor = true;
-            this.btnOBSStatus.Click += new System.EventHandler(this.btnOBSStatus_Click);
-            // 
-            // lblDevices
-            // 
-            this.lblDevices.AutoSize = true;
-            this.lblDevices.Location = new System.Drawing.Point(3, 9);
-            this.lblDevices.Name = "lblDevices";
-            this.lblDevices.Size = new System.Drawing.Size(44, 13);
-            this.lblDevices.TabIndex = 2;
-            this.lblDevices.Text = "Device:";
-            // 
-            // btnDeviceRefresh
-            // 
-            this.btnDeviceRefresh.Image = global::ConTroll.Properties.Resources.Refresh;
-            this.btnDeviceRefresh.Location = new System.Drawing.Point(235, 4);
-            this.btnDeviceRefresh.Name = "btnDeviceRefresh";
-            this.btnDeviceRefresh.Size = new System.Drawing.Size(23, 23);
-            this.btnDeviceRefresh.TabIndex = 1;
-            this.btnDeviceRefresh.UseVisualStyleBackColor = true;
-            // 
-            // cboDevices
-            // 
-            this.cboDevices.DataSource = this.dsSNIDevice;
-            this.cboDevices.DisplayMember = "DisplayName";
-            this.cboDevices.FormattingEnabled = true;
-            this.cboDevices.Location = new System.Drawing.Point(53, 6);
-            this.cboDevices.Name = "cboDevices";
-            this.cboDevices.Size = new System.Drawing.Size(176, 21);
-            this.cboDevices.TabIndex = 0;
-            // 
-            // dsSNIDevice
-            // 
-            this.dsSNIDevice.DataSource = typeof(SNI.DevicesResponse.Types.Device);
             // 
             // tabConfig
             // 
@@ -310,6 +258,16 @@ namespace ConTroll
             this.chkDistortMirrorX.UseVisualStyleBackColor = true;
             this.chkDistortMirrorX.CheckedChanged += new System.EventHandler(this.chkDistortMirrorX_CheckedChanged);
             // 
+            // lblDistortInterval
+            // 
+            this.lblDistortInterval.AutoSize = true;
+            this.lblDistortInterval.Location = new System.Drawing.Point(33, 22);
+            this.lblDistortInterval.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.lblDistortInterval.Name = "lblDistortInterval";
+            this.lblDistortInterval.Size = new System.Drawing.Size(45, 13);
+            this.lblDistortInterval.TabIndex = 23;
+            this.lblDistortInterval.Text = "Interval:";
+            // 
             // txtDistortInterval
             // 
             this.txtDistortInterval.ForeColor = System.Drawing.SystemColors.WindowText;
@@ -429,14 +387,39 @@ namespace ConTroll
             // 
             // grpSNI
             // 
+            this.grpSNI.Controls.Add(this.lblDevices);
+            this.grpSNI.Controls.Add(this.cboDevices);
             this.grpSNI.Controls.Add(this.lblSNIAddress);
             this.grpSNI.Controls.Add(this.txtSNIAddress);
             this.grpSNI.Location = new System.Drawing.Point(8, 84);
             this.grpSNI.Name = "grpSNI";
-            this.grpSNI.Size = new System.Drawing.Size(248, 47);
+            this.grpSNI.Size = new System.Drawing.Size(248, 75);
             this.grpSNI.TabIndex = 14;
             this.grpSNI.TabStop = false;
             this.grpSNI.Text = "SNI Connection";
+            // 
+            // lblDevices
+            // 
+            this.lblDevices.AutoSize = true;
+            this.lblDevices.Location = new System.Drawing.Point(5, 49);
+            this.lblDevices.Name = "lblDevices";
+            this.lblDevices.Size = new System.Drawing.Size(44, 13);
+            this.lblDevices.TabIndex = 15;
+            this.lblDevices.Text = "Device:";
+            // 
+            // cboDevices
+            // 
+            this.cboDevices.DataSource = this.dsSNIDevice;
+            this.cboDevices.DisplayMember = "DisplayName";
+            this.cboDevices.FormattingEnabled = true;
+            this.cboDevices.Location = new System.Drawing.Point(66, 46);
+            this.cboDevices.Name = "cboDevices";
+            this.cboDevices.Size = new System.Drawing.Size(175, 21);
+            this.cboDevices.TabIndex = 14;
+            // 
+            // dsSNIDevice
+            // 
+            this.dsSNIDevice.DataSource = typeof(SNI.DevicesResponse.Types.Device);
             // 
             // lblSNIAddress
             // 
@@ -461,7 +444,7 @@ namespace ConTroll
             // 
             // grpOBSSettings
             // 
-            this.grpOBSSettings.Controls.Add(this.lblObsAddress);
+            this.grpOBSSettings.Controls.Add(this.lblOBSAddress);
             this.grpOBSSettings.Controls.Add(this.txtOBSAddress);
             this.grpOBSSettings.Controls.Add(this.lblOBSPassword);
             this.grpOBSSettings.Controls.Add(this.txtOBSPassword);
@@ -472,15 +455,15 @@ namespace ConTroll
             this.grpOBSSettings.TabStop = false;
             this.grpOBSSettings.Text = "OBS Websocket";
             // 
-            // lblObsAddress
+            // lblOBSAddress
             // 
-            this.lblObsAddress.AutoSize = true;
-            this.lblObsAddress.Location = new System.Drawing.Point(5, 21);
-            this.lblObsAddress.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.lblObsAddress.Name = "lblObsAddress";
-            this.lblObsAddress.Size = new System.Drawing.Size(48, 13);
-            this.lblObsAddress.TabIndex = 9;
-            this.lblObsAddress.Text = "Address:";
+            this.lblOBSAddress.AutoSize = true;
+            this.lblOBSAddress.Location = new System.Drawing.Point(5, 21);
+            this.lblOBSAddress.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.lblOBSAddress.Name = "lblOBSAddress";
+            this.lblOBSAddress.Size = new System.Drawing.Size(48, 13);
+            this.lblOBSAddress.TabIndex = 9;
+            this.lblOBSAddress.Text = "Address:";
             // 
             // txtOBSAddress
             // 
@@ -518,21 +501,64 @@ namespace ConTroll
             // 
             this.dsOBSGameSource.DataSource = typeof(OBSWebsocketDotNet.Types.SourceInfo);
             // 
-            // lblDistortInterval
+            // stsMain
             // 
-            this.lblDistortInterval.AutoSize = true;
-            this.lblDistortInterval.Location = new System.Drawing.Point(33, 22);
-            this.lblDistortInterval.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.lblDistortInterval.Name = "lblDistortInterval";
-            this.lblDistortInterval.Size = new System.Drawing.Size(45, 13);
-            this.lblDistortInterval.TabIndex = 23;
-            this.lblDistortInterval.Text = "Interval:";
+            this.stsMain.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.btnSNIStatus,
+            this.lblSNIStatus,
+            this.btnOBSStatus,
+            this.lblOBSStatus});
+            this.stsMain.Location = new System.Drawing.Point(0, 214);
+            this.stsMain.Name = "stsMain";
+            this.stsMain.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
+            this.stsMain.Size = new System.Drawing.Size(294, 24);
+            this.stsMain.TabIndex = 1;
+            // 
+            // btnSNIStatus
+            // 
+            this.btnSNIStatus.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.btnSNIStatus.Image = global::ConTroll.Properties.Resources.OnlineStatusUnknown;
+            this.btnSNIStatus.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.btnSNIStatus.Name = "btnSNIStatus";
+            this.btnSNIStatus.ShowDropDownArrow = false;
+            this.btnSNIStatus.Size = new System.Drawing.Size(20, 22);
+            this.btnSNIStatus.ToolTipText = "Disconnected";
+            this.btnSNIStatus.MouseLeave += new System.EventHandler(this.btnSNIStatus_MouseLeave);
+            this.btnSNIStatus.MouseHover += new System.EventHandler(this.btnSNIStatus_MouseHover);
+            // 
+            // lblSNIStatus
+            // 
+            this.lblSNIStatus.BorderSides = System.Windows.Forms.ToolStripStatusLabelBorderSides.Left;
+            this.lblSNIStatus.Name = "lblSNIStatus";
+            this.lblSNIStatus.Size = new System.Drawing.Size(29, 19);
+            this.lblSNIStatus.Text = "SNI";
+            // 
+            // btnOBSStatus
+            // 
+            this.btnOBSStatus.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.btnOBSStatus.Image = global::ConTroll.Properties.Resources.OnlineStatusUnknown;
+            this.btnOBSStatus.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.btnOBSStatus.Name = "btnOBSStatus";
+            this.btnOBSStatus.ShowDropDownArrow = false;
+            this.btnOBSStatus.Size = new System.Drawing.Size(20, 22);
+            this.btnOBSStatus.Text = "OBS";
+            this.btnOBSStatus.ToolTipText = "Disconnected";
+            this.btnOBSStatus.Click += new System.EventHandler(this.btnOBSStatus_Click);
+            this.btnOBSStatus.MouseLeave += new System.EventHandler(this.btnOBSStatus_MouseLeave);
+            this.btnOBSStatus.MouseHover += new System.EventHandler(this.btnOBSStatus_MouseHover);
+            // 
+            // lblOBSStatus
+            // 
+            this.lblOBSStatus.Name = "lblOBSStatus";
+            this.lblOBSStatus.Size = new System.Drawing.Size(29, 19);
+            this.lblOBSStatus.Text = "OBS";
             // 
             // Main
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(294, 216);
+            this.ClientSize = new System.Drawing.Size(294, 238);
+            this.Controls.Add(this.stsMain);
             this.Controls.Add(this.tabbarMain);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "Main";
@@ -542,7 +568,6 @@ namespace ConTroll
             this.tabbarMain.ResumeLayout(false);
             this.tabMain.ResumeLayout(false);
             this.tabMain.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dsSNIDevice)).EndInit();
             this.tabConfig.ResumeLayout(false);
             this.tabConfig.PerformLayout();
             this.grpDistortion.ResumeLayout(false);
@@ -550,32 +575,32 @@ namespace ConTroll
             this.tabConnection.ResumeLayout(false);
             this.grpSNI.ResumeLayout(false);
             this.grpSNI.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dsSNIDevice)).EndInit();
             this.grpOBSSettings.ResumeLayout(false);
             this.grpOBSSettings.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dsOBSGameSource)).EndInit();
+            this.stsMain.ResumeLayout(false);
+            this.stsMain.PerformLayout();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
         #endregion
 
+        private System.Windows.Forms.ToolTip tooltip;
         private System.Windows.Forms.TabControl tabbarMain;
         private System.Windows.Forms.TabPage tabMain;
         private System.Windows.Forms.TabPage tabConnection;
         private System.Windows.Forms.Label lblOBSPassword;
-        private System.Windows.Forms.Label lblObsAddress;
+        private System.Windows.Forms.Label lblOBSAddress;
         private System.Windows.Forms.TextBox txtOBSPassword;
         private System.Windows.Forms.TextBox txtOBSAddress;
         private System.Windows.Forms.GroupBox grpOBSSettings;
-        private System.Windows.Forms.Button btnDeviceRefresh;
-        private System.Windows.Forms.ComboBox cboDevices;
         private System.Windows.Forms.GroupBox grpSNI;
         private System.Windows.Forms.Label lblSNIAddress;
         private System.Windows.Forms.TextBox txtSNIAddress;
         private System.Windows.Forms.BindingSource dsSNIDevice;
-        private System.Windows.Forms.Label lblDevices;
-        private System.Windows.Forms.Label lblOBSStatus;
-        private System.Windows.Forms.Button btnOBSStatus;
         private System.Windows.Forms.TabPage tabConfig;
         private System.Windows.Forms.ComboBox cboOBSGameSource;
         private System.Windows.Forms.BindingSource dsOBSGameSource;
@@ -601,6 +626,13 @@ namespace ConTroll
         private System.Windows.Forms.CheckBox chkDistortMirrorY;
         private System.Windows.Forms.CheckBox chkDistortMirrorX;
         private System.Windows.Forms.Label lblDistortInterval;
+        private System.Windows.Forms.StatusStrip stsMain;
+        private System.Windows.Forms.ToolStripDropDownButton btnSNIStatus;
+        private System.Windows.Forms.ToolStripStatusLabel lblSNIStatus;
+        private System.Windows.Forms.ToolStripDropDownButton btnOBSStatus;
+        private System.Windows.Forms.ToolStripStatusLabel lblOBSStatus;
+        private System.Windows.Forms.Label lblDevices;
+        private System.Windows.Forms.ComboBox cboDevices;
     }
 }
 
