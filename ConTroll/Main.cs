@@ -69,6 +69,13 @@ namespace ConTroll
 
         private void LoadSettings()
         {
+            if (Properties.Settings.Default.UpdateSettings)
+            {
+                Properties.Settings.Default.Upgrade();
+                Properties.Settings.Default.UpdateSettings = false;
+                Properties.Settings.Default.Save();
+            }
+
             string value = Properties.Settings.Default.OBSWebsocketAddress;
             if (value != "")
             {
