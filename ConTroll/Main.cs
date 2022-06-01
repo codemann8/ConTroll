@@ -369,7 +369,6 @@ namespace ConTroll
         }
         private void btnSNIStatus_MouseHover(object sender, EventArgs e)
         {
-            tooltip.ShowAlways = true;
             tooltip.SetToolTip(stsMain, btnSNIStatus.ToolTipText);
         }
 
@@ -380,7 +379,6 @@ namespace ConTroll
 
         private void btnOBSStatus_MouseHover(object sender, EventArgs e)
         {
-            tooltip.ShowAlways = true;
             tooltip.SetToolTip(stsMain, btnOBSStatus.ToolTipText);
         }
 

@@ -553,6 +553,10 @@ namespace ConTroll
             this.lblOBSStatus.Size = new System.Drawing.Size(29, 19);
             this.lblOBSStatus.Text = "OBS";
             // 
+            // tooltip
+            // 
+            this.tooltip.ShowAlways = true;
+            // 
             // Main
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
