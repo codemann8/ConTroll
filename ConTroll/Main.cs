@@ -123,8 +123,11 @@ namespace ConTroll
         {
             btnOBSStatus_Click(null, null);
 
-            _distort = new DistortionActivity(this); 
-            _distort.Stop();
+            if (_obs != null && _obs.Status == OBSConnect.OBSStatus.Connected)
+            {
+                _distort = new DistortionActivity(this);
+                _distort.Stop();
+            }
         }
 
         #region Form Control Events

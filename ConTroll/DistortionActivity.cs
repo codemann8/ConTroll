@@ -60,6 +60,18 @@ namespace ConTroll
 
         public bool CanDistort()
         {
+            if (_obs != null && _obs.Status != OBSConnect.OBSStatus.Connected)
+            {
+                MessageBox.Show("OBS is not connected", "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                return false;
+            }
+
+            if (Properties.Settings.Default.OBSGameSource == "")
+            {
+                MessageBox.Show("No OBS Game Source is selected", "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                return false;
+            }
+
             if (_sni == null || _sni.Status == SNIClient.DeviceState.SNIOffline || _sni.Status == SNIClient.DeviceState.NoDevice)
             {
                 MessageBox.Show("No devices are detected thru SNI", "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
@@ -83,18 +95,6 @@ namespace ConTroll
             else
             {
                 MessageBox.Show("No ROM detected. If the ROM is loaded, try power-cycling the console and SNI.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return false;
-            }
-
-            if (_obs != null && _obs.Status != OBSConnect.OBSStatus.Connected)
-            {
-                MessageBox.Show("OBS is not connected", "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-                return false;
-            }
-
-            if (Properties.Settings.Default.OBSGameSource == "")
-            {
-                MessageBox.Show("No OBS Game Source is selected", "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 return false;
             }
 
