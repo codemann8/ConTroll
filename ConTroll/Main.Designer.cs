@@ -591,8 +591,6 @@ namespace ConTroll
         }
 
         #endregion
-
-        private System.Windows.Forms.ToolTip tooltip;
         private System.Windows.Forms.TabControl tabbarMain;
         private System.Windows.Forms.TabPage tabMain;
         private System.Windows.Forms.TabPage tabConnection;
@@ -637,6 +635,7 @@ namespace ConTroll
         private System.Windows.Forms.ToolStripStatusLabel lblOBSStatus;
         private System.Windows.Forms.Label lblDevices;
         private System.Windows.Forms.ComboBox cboDevices;
+        public System.Windows.Forms.ToolTip tooltip;
     }
 }
 

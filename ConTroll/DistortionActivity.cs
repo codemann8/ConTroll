@@ -13,7 +13,7 @@ using OBSWebsocketDotNet.Types;
 
 namespace ConTroll
 {
-    public class DistortionActivity : IDisposable
+    public class DistortionActivity : Action, IDisposable
     {
         private Main _main;
         private OBSConnect _obs;
@@ -51,30 +51,45 @@ namespace ConTroll
             public int Duration { get; set; }
         }
 
-        public DistortionActivity(Main main)
+        public DistortionActivity(Main main) : base("Social Distortion")
         {
             _main = main;
             _obs = main._obs;
             _sni = main._sni;
         }
 
-        public bool CanDistort()
+        protected override bool CanPerformAction(ActionArgs args)
         {
+            DistortionActionArgs actionArgs = new DistortionActionArgs(args);
+            if (!actionArgs.ShouldReset
+                && !Properties.Settings.Default.DistortMirrorX
+                && !Properties.Settings.Default.DistortMirrorY
+                && !Properties.Settings.Default.DistortRotate
+                && !Properties.Settings.Default.DistortZoom
+                && !Properties.Settings.Default.DistortScaleX
+                && !Properties.Settings.Default.DistortScaleY
+                && !Properties.Settings.Default.DistortShearX
+                && !Properties.Settings.Default.DistortShearY)
+            {
+                this.Message = "No Social Distortion effects are enabled";
+                return false;
+            }
+
             if (_obs != null && _obs.Status != OBSConnect.OBSStatus.Connected)
             {
-                MessageBox.Show("OBS is not connected", "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                this.Message = "OBS is not connected";
                 return false;
             }
 
             if (Properties.Settings.Default.OBSGameSource == "")
             {
-                MessageBox.Show("No OBS Game Source is selected", "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                this.Message = "No OBS Game Source is selected";
                 return false;
             }
 
             if (_sni == null || _sni.Status == SNIClient.DeviceState.SNIOffline || _sni.Status == SNIClient.DeviceState.NoDevice)
             {
-                MessageBox.Show("No devices are detected thru SNI", "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                this.Message = "No devices are detected thru SNI";
                 return false;
             }
 
@@ -83,18 +98,18 @@ namespace ConTroll
                 string header = _sni.GetROMHeader();
                 if (header == "NO-ROM" || header.StartsWith("NO-CONF-"))
                 {
-                    MessageBox.Show("No ROM detected. If the ROM is loaded, try restarting SNI.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    this.Message = "No ROM detected. If the ROM is loaded, try restarting SNI.";
                     return false;
                 }
                 if (!header.EndsWith("O"))
                 {
-                    MessageBox.Show("Incorrect ROM type detected. Currently only seeds generated from the OWR branch are compatible.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                    this.Message = "Incorrect ROM type detected. Currently only seeds generated from the OWR branch are compatible.";
                     return false;
                 }
             }
             else
             {
-                MessageBox.Show("No ROM detected. If the ROM is loaded, try power-cycling the console and SNI.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                this.Message = "No ROM detected. If the ROM is loaded, try power-cycling the console and SNI.";
                 return false;
             }
 
@@ -104,7 +119,7 @@ namespace ConTroll
             }
             catch (ErrorResponseException ex)
             {
-                MessageBox.Show("The selected OBS Game Source does not exist", "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                this.Message = "The selected OBS Game Source does not exist";
                 return false;
             }
 
@@ -119,20 +134,20 @@ namespace ConTroll
                     filters.Remove(type.TypeID);
                     if (filters.Count == 0)
                     {
+                        this.Message = "";
                         return true;
                     }
                 }
             }
-            MessageBox.Show("OBS is missing the following plugins: " + string.Join(", ", filters.Values) + "\n\nCannot enable Mirror Mode", "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+            this.Message = "OBS is missing the following plugins: " + string.Join(", ", filters.Values);
             return false;
         }
 
         public void Start()
         {
-            if (Status == DistortStatus.Stopped && CanDistort())
+            if (Status == DistortStatus.Stopped && CanPerformAction())
             {
-                Status = DistortStatus.Running;
-                UpdateDistortStatus();
+                UpdateStatus(DistortStatus.Running);
                 IsCancelPending = false;
 
                 Process = Task.Run(() =>
@@ -140,6 +155,7 @@ namespace ConTroll
                     RunDistortion();
                 });
             }
+            UpdateStatus();
         }
 
         public void Stop()
@@ -149,7 +165,8 @@ namespace ConTroll
             {
                 if (Status == DistortStatus.Stopped)
                 {
-                    DoDistort(true);
+                    DistortionActionArgs args = new DistortionActionArgs(true);
+                    DoAction(args);
                     return;
                 }
 
@@ -158,8 +175,7 @@ namespace ConTroll
                     System.Threading.Thread.Sleep(100);
                 }
 
-                Status = DistortStatus.Stopped;
-                UpdateDistortStatus();
+                UpdateStatus(DistortStatus.Stopped);
             });
         }
 
@@ -170,36 +186,40 @@ namespace ConTroll
                 System.Threading.Thread.CurrentThread.Name = "DistortionWorker";
             }
 
-            DoDistort(true);
+            //byte[] raw = _sni.Read(0, 0x10000);
+            //System.IO.File.WriteAllBytes(@"L:\_Work\Zelda\test-out.bin", raw);
 
-            Status = DistortStatus.Busy;
-            UpdateDistortStatus();
-
-            while (!IsCancelPending && DoDistort())
+            DistortionActionArgs args = new DistortionActionArgs(true);
+            if (DoAction(args))
             {
-                Status = DistortStatus.Running;
-                UpdateDistortStatus();
+                UpdateStatus(DistortStatus.Busy);
 
-                uint timeout = Properties.Settings.Default.DistortInterval;
-                while (timeout > 0 && !IsCancelPending)
+                while (!IsCancelPending && DoAction())
                 {
-                    System.Threading.Thread.Sleep(1000);
-                    timeout--;
-                }
+                    UpdateStatus(DistortStatus.Running);
 
-                Status = DistortStatus.Busy;
-                UpdateDistortStatus();
+                    uint timeout = Properties.Settings.Default.DistortInterval;
+                    while (timeout > 0 && !IsCancelPending)
+                    {
+                        System.Threading.Thread.Sleep(1000);
+                        timeout--;
+                    }
+
+                    UpdateStatus(DistortStatus.Busy);
+                }
+                UpdateStatus();
+
+                DoAction(args);
             }
 
-            DoDistort(true);
-
-            Status = DistortStatus.Stopped;
-            UpdateDistortStatus();
+            UpdateStatus(DistortStatus.Stopped);
         }
 
-        private bool DoDistort(bool doReset = false)
+        protected override bool PerformAction(ActionArgs args)
         {
-            if (!doReset && _sni != null)
+            DistortionActionArgs actionArgs = new DistortionActionArgs(args);
+
+            if (!actionArgs.ShouldReset && _sni != null)
             {
                 switch (_sni.Status)
                 {
@@ -216,7 +236,7 @@ namespace ConTroll
                 }
             }
 
-            if (doReset || _sni.Status == SNIClient.DeviceState.DeviceStandby)
+            if (actionArgs.ShouldReset || _sni.Status == SNIClient.DeviceState.DeviceStandby)
             {
                 //add filters if they don't exist
                 try
@@ -420,7 +440,7 @@ namespace ConTroll
             }
 
             //disable mirror mode
-            if (doReset)
+            if (actionArgs.ShouldReset)
             {
                 System.Threading.Thread.Sleep((int)Properties.Settings.Default.DistortDuration + 500);
                 _obs._obs.SetSourceFilterVisibility(Properties.Settings.Default.OBSGameSource, DISTORT_FILTER, false);
@@ -429,7 +449,13 @@ namespace ConTroll
             return true;
         }
 
-        public void UpdateDistortStatus()
+        private void UpdateStatus(DistortStatus status)
+        {
+            Status = status;
+            UpdateStatus();
+        }
+
+        public override void UpdateStatus()
         {
             Image img;
             switch (Status)
@@ -446,6 +472,12 @@ namespace ConTroll
             }
 
             _main.BeginInvoke((MethodInvoker)(() => {
+                if (Message != "")
+                {
+                    img = Properties.Resources.OnlineStatusPresenting;
+                }
+                _main.tooltip.SetToolTip(_main.btnActivityDistortion, Message);
+
                 if (img != _main.btnActivityDistortion.Image)
                 {
                     _main.btnActivityDistortion.Image.Dispose();
@@ -477,6 +509,22 @@ namespace ConTroll
             Stopped = 0,
             Running = 1,
             Busy = 2
+        }
+    }
+
+    public class DistortionActionArgs : ActionArgs
+    {
+        public bool ShouldReset;
+        public DistortionActionArgs(bool shouldReset = false)
+        {
+            this.ShouldReset = shouldReset;
+        }
+        public DistortionActionArgs(ActionArgs args)
+        {
+            if (args.GetType() == typeof(DistortionActionArgs))
+            {
+                this.ShouldReset = ((DistortionActionArgs)args).ShouldReset;
+            }
         }
     }
 }
