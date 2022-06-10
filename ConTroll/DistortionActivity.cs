@@ -101,9 +101,10 @@ namespace ConTroll
                     this.Message = "No ROM detected. If the ROM is loaded, try restarting SNI.";
                     return false;
                 }
-                if (!header.EndsWith("O"))
+                if ((Properties.Settings.Default.DistortMirrorX || Properties.Settings.Default.DistortMirrorY || Properties.Settings.Default.DistortRotate)
+                    && !header.EndsWith("O"))
                 {
-                    this.Message = "Incorrect ROM type detected. Currently only seeds generated from the OWR branch are compatible.";
+                    this.Message = "Mirroring and Rotating is incompatible with this ROM. Currently only seeds generated from the OWR branch are compatible. Try disabling Mirroring and Rotating effects.";
                     return false;
                 }
             }
