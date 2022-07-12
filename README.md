@@ -36,7 +36,7 @@ I will explain more in the future, but the utility should be mostly self explana
 - Load up the game, it is important to be in-game (title, intro, and file select screen are fine, just have the ROM loaded) before you start.
 - Once everything is connected, click `Social Distortion`.
 - Have fun!
-- There are additional options available in the `Config` tab. You can change the time interval in between distortions. You can also pick and choose which distortions can get applied.
+- There are additional options available in the `Config` tab. You can change the time interval in between distortions. You can also pick and choose which distortions can get applied. A checkmark will enable that distortion at all times, where a semi-mark will make it a random chance that it gets applied on every interval.
 
 Keep in mind, this is very new, there are bound to be bugs. Try to make sure that you are in-game at all times. If there is an issue, try closing and reopening ConTroll.exe. If you do get an error message, expand the `Details` message and screenshot it and share it with me (I only care about the topmost part of the details, no need to scroll to the bottom).
 
