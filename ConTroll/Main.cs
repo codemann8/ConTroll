@@ -107,14 +107,14 @@ namespace ConTroll
             txtDistortAdjustX.Text = Properties.Settings.Default.DistortAdjustX.ToString();
             txtDistortAdjustY.Text = Properties.Settings.Default.DistortAdjustY.ToString();
 
-            chkDistortMirrorX.Checked = Properties.Settings.Default.DistortMirrorX;
-            chkDistortMirrorY.Checked = Properties.Settings.Default.DistortMirrorY;
-            chkDistortRotate.Checked = Properties.Settings.Default.DistortRotate;
-            chkDistortZoom.Checked = Properties.Settings.Default.DistortZoom;
-            chkDistortScaleX.Checked = Properties.Settings.Default.DistortScaleX;
-            chkDistortScaleY.Checked = Properties.Settings.Default.DistortScaleY;
-            chkDistortShearX.Checked = Properties.Settings.Default.DistortShearX;
-            chkDistortShearY.Checked = Properties.Settings.Default.DistortShearY;
+            chkDistortMirrorX.CheckState = Properties.Settings.Default.DistortMirrorX;
+            chkDistortMirrorY.CheckState = Properties.Settings.Default.DistortMirrorY;
+            chkDistortRotate.CheckState = Properties.Settings.Default.DistortRotate;
+            chkDistortZoom.CheckState = Properties.Settings.Default.DistortZoom;
+            chkDistortScaleX.CheckState = Properties.Settings.Default.DistortScaleX;
+            chkDistortScaleY.CheckState = Properties.Settings.Default.DistortScaleY;
+            chkDistortShearX.CheckState = Properties.Settings.Default.DistortShearX;
+            chkDistortShearY.CheckState = Properties.Settings.Default.DistortShearY;
 
             value = Properties.Settings.Default.OBSGameSource;
             if (value != "")
@@ -257,52 +257,113 @@ namespace ConTroll
             Properties.Settings.Default.Save();
         }
 
-        private void chkDistortMirrorX_CheckedChanged(object sender, EventArgs e)
+        private void chkDistortMirrorX_CheckStateChanged(object sender, EventArgs e)
         {
-            Properties.Settings.Default.DistortMirrorX = chkDistortMirrorX.Checked;
+            Properties.Settings.Default.DistortMirrorX = chkDistortMirrorX.CheckState;
             Properties.Settings.Default.Save();
         }
 
-        private void chkDistortMirrorY_CheckedChanged(object sender, EventArgs e)
+        private void chkDistortMirrorY_CheckStateChanged(object sender, EventArgs e)
         {
-            Properties.Settings.Default.DistortMirrorY = chkDistortMirrorY.Checked;
+            Properties.Settings.Default.DistortMirrorY = chkDistortMirrorY.CheckState;
             Properties.Settings.Default.Save();
         }
 
-        private void chkDistortRotate_CheckedChanged(object sender, EventArgs e)
+        private void chkDistortRotate_CheckStateChanged(object sender, EventArgs e)
         {
-            Properties.Settings.Default.DistortRotate = chkDistortRotate.Checked;
+            Properties.Settings.Default.DistortRotate = chkDistortRotate.CheckState;
             Properties.Settings.Default.Save();
         }
 
-        private void chkDistortZoom_CheckedChanged(object sender, EventArgs e)
+        private void chkDistortZoom_CheckStateChanged(object sender, EventArgs e)
         {
-            Properties.Settings.Default.DistortZoom = chkDistortZoom.Checked;
+            Properties.Settings.Default.DistortZoom = chkDistortZoom.CheckState;
             Properties.Settings.Default.Save();
         }
 
-        private void chkDistortScaleX_CheckedChanged(object sender, EventArgs e)
+        private void chkDistortScaleX_CheckStateChanged(object sender, EventArgs e)
         {
-            Properties.Settings.Default.DistortScaleX = chkDistortScaleX.Checked;
+            Properties.Settings.Default.DistortScaleX = chkDistortScaleX.CheckState;
             Properties.Settings.Default.Save();
         }
 
-        private void chkDistortScaleY_CheckedChanged(object sender, EventArgs e)
+        private void chkDistortScaleY_CheckStateChanged(object sender, EventArgs e)
         {
-            Properties.Settings.Default.DistortScaleY = chkDistortScaleY.Checked;
+            Properties.Settings.Default.DistortScaleY = chkDistortScaleY.CheckState;
             Properties.Settings.Default.Save();
         }
 
-        private void chkDistortShearX_CheckedChanged(object sender, EventArgs e)
+        private void chkDistortShearX_CheckStateChanged(object sender, EventArgs e)
         {
-            Properties.Settings.Default.DistortShearX = chkDistortShearX.Checked;
+            Properties.Settings.Default.DistortShearX = chkDistortShearX.CheckState;
             Properties.Settings.Default.Save();
         }
 
-        private void chkDistortShearY_CheckedChanged(object sender, EventArgs e)
+        private void chkDistortShearY_CheckStateChanged(object sender, EventArgs e)
         {
-            Properties.Settings.Default.DistortShearY = chkDistortShearY.Checked;
+            Properties.Settings.Default.DistortShearY = chkDistortShearY.CheckState;
             Properties.Settings.Default.Save();
+        }
+
+        private void chkDistortColor_CheckStateChanged(object sender, EventArgs e)
+        {
+            Properties.Settings.Default.DistortColor = chkDistortColor.CheckState;
+            Properties.Settings.Default.Save();
+        }
+
+        private void chkDistortMirrorX_Click(object sender, EventArgs e)
+        {
+            ReverseCheckStateOrder((CheckBox)sender);
+        }
+
+        private void chkDistortMirrorY_Click(object sender, EventArgs e)
+        {
+            ReverseCheckStateOrder((CheckBox)sender);
+        }
+
+        private void chkDistortRotate_Click(object sender, EventArgs e)
+        {
+            ReverseCheckStateOrder((CheckBox)sender);
+        }
+
+        private void chkDistortZoom_Click(object sender, EventArgs e)
+        {
+            ReverseCheckStateOrder((CheckBox)sender);
+        }
+
+        private void chkDistortScaleX_Click(object sender, EventArgs e)
+        {
+            ReverseCheckStateOrder((CheckBox)sender);
+        }
+
+        private void chkDistortScaleY_Click(object sender, EventArgs e)
+        {
+            ReverseCheckStateOrder((CheckBox)sender);
+        }
+
+        private void chkDistortShearX_Click(object sender, EventArgs e)
+        {
+            ReverseCheckStateOrder((CheckBox)sender);
+        }
+
+        private void chkDistortShearY_Click(object sender, EventArgs e)
+        {
+            ReverseCheckStateOrder((CheckBox)sender);
+        }
+
+        private void chkDistortColor_Click(object sender, EventArgs e)
+        {
+            ReverseCheckStateOrder((CheckBox)sender);
+        }
+
+        private void ReverseCheckStateOrder(CheckBox checkBox)
+        {
+            switch (checkBox.CheckState)
+            {
+                case CheckState.Checked: checkBox.CheckState = CheckState.Indeterminate; break;
+                case CheckState.Unchecked: checkBox.CheckState = CheckState.Checked; break;
+                default: checkBox.CheckState = CheckState.Unchecked; break;
+            }
         }
 
         private void btnOBSStatus_Click(object sender, EventArgs e)

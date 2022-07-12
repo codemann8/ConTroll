@@ -62,14 +62,14 @@ namespace ConTroll
         {
             DistortionActionArgs actionArgs = new DistortionActionArgs(args);
             if (!actionArgs.ShouldReset
-                && !Properties.Settings.Default.DistortMirrorX
-                && !Properties.Settings.Default.DistortMirrorY
-                && !Properties.Settings.Default.DistortRotate
-                && !Properties.Settings.Default.DistortZoom
-                && !Properties.Settings.Default.DistortScaleX
-                && !Properties.Settings.Default.DistortScaleY
-                && !Properties.Settings.Default.DistortShearX
-                && !Properties.Settings.Default.DistortShearY)
+                && Properties.Settings.Default.DistortMirrorX == CheckState.Unchecked
+                && Properties.Settings.Default.DistortMirrorY == CheckState.Unchecked
+                && Properties.Settings.Default.DistortRotate == CheckState.Unchecked
+                && Properties.Settings.Default.DistortZoom == CheckState.Unchecked
+                && Properties.Settings.Default.DistortScaleX == CheckState.Unchecked
+                && Properties.Settings.Default.DistortScaleY == CheckState.Unchecked
+                && Properties.Settings.Default.DistortShearX == CheckState.Unchecked
+                && Properties.Settings.Default.DistortShearY == CheckState.Unchecked
             {
                 this.Message = "No Social Distortion effects are enabled";
                 return false;
@@ -306,6 +306,25 @@ namespace ConTroll
                 //play sound
                 Random r = new Random();
                 if (Properties.Settings.Default.DistortInterval >= 10)
+                _obs._obs.SetSourceFilterVisibility(Properties.Settings.Default.OBSGameSource, DISTORT_FILTER, true);
+                List<DistortEffect> effects = new List<DistortEffect>();
+                if (Properties.Settings.Default.DistortMirrorX == CheckState.Indeterminate) effects.Add(DistortEffect.MirrorX);
+                else MirrorModeFlippedX = Properties.Settings.Default.DistortMirrorX == CheckState.Checked;
+                if (Properties.Settings.Default.DistortMirrorY == CheckState.Indeterminate) effects.Add(DistortEffect.MirrorY);
+                else MirrorModeFlippedY = Properties.Settings.Default.DistortMirrorY == CheckState.Checked;
+                if (Properties.Settings.Default.DistortRotate == CheckState.Indeterminate) effects.Add(DistortEffect.Rotate);
+                else MirrorModeRotated = Properties.Settings.Default.DistortRotate == CheckState.Checked;
+                if (Properties.Settings.Default.DistortZoom == CheckState.Indeterminate) effects.Add(DistortEffect.Zoom);
+                else MirrorModeZoomed = Properties.Settings.Default.DistortZoom == CheckState.Checked;
+                if (Properties.Settings.Default.DistortScaleX == CheckState.Indeterminate) effects.Add(DistortEffect.ScaleX);
+                else MirrorModeScaledX = Properties.Settings.Default.DistortScaleX == CheckState.Checked;
+                if (Properties.Settings.Default.DistortScaleY == CheckState.Indeterminate) effects.Add(DistortEffect.ScaleY);
+                else MirrorModeScaledY = Properties.Settings.Default.DistortScaleY == CheckState.Checked;
+                if (Properties.Settings.Default.DistortShearX == CheckState.Indeterminate) effects.Add(DistortEffect.ShearX);
+                else MirrorModeShearedX = Properties.Settings.Default.DistortShearX == CheckState.Checked;
+                if (Properties.Settings.Default.DistortShearY == CheckState.Indeterminate) effects.Add(DistortEffect.ShearY);
+                else MirrorModeShearedY = Properties.Settings.Default.DistortShearY == CheckState.Checked;
+
                 {
                     int i = r.Next(0, DistortSounds.Length);
                     if (DistortSounds[i].Stream != null)
@@ -320,25 +339,6 @@ namespace ConTroll
                 }
 
                 //randomly flip one setting
-                _obs._obs.SetSourceFilterVisibility(Properties.Settings.Default.OBSGameSource, DISTORT_FILTER, true);
-                List<DistortEffect> effects = new List<DistortEffect>();
-                if (Properties.Settings.Default.DistortMirrorX) effects.Add(DistortEffect.MirrorX);
-                else MirrorModeFlippedX = false;
-                if (Properties.Settings.Default.DistortMirrorY) effects.Add(DistortEffect.MirrorY);
-                else MirrorModeFlippedY = false;
-                if (Properties.Settings.Default.DistortRotate) effects.Add(DistortEffect.Rotate);
-                else MirrorModeRotated = false;
-                if (Properties.Settings.Default.DistortZoom) effects.Add(DistortEffect.Zoom);
-                else MirrorModeZoomed = false;
-                if (Properties.Settings.Default.DistortScaleX) effects.Add(DistortEffect.ScaleX);
-                else MirrorModeScaledX = false;
-                if (Properties.Settings.Default.DistortScaleY) effects.Add(DistortEffect.ScaleY);
-                else MirrorModeScaledY = false;
-                if (Properties.Settings.Default.DistortShearX) effects.Add(DistortEffect.ShearX);
-                else MirrorModeShearedX = false;
-                if (Properties.Settings.Default.DistortShearY) effects.Add(DistortEffect.ShearY);
-                else MirrorModeShearedY = false;
-
                 switch (effects[r.Next(0, effects.Count)])
                 {
                     case DistortEffect.MirrorX:

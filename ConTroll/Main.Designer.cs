@@ -178,8 +178,10 @@ namespace ConTroll
             this.chkDistortShearY.Size = new System.Drawing.Size(92, 17);
             this.chkDistortShearY.TabIndex = 31;
             this.chkDistortShearY.Text = "Shear Vertical";
+            this.chkDistortShearY.ThreeState = true;
             this.chkDistortShearY.UseVisualStyleBackColor = true;
-            this.chkDistortShearY.CheckedChanged += new System.EventHandler(this.chkDistortShearY_CheckedChanged);
+            this.chkDistortShearY.CheckStateChanged += new System.EventHandler(this.chkDistortShearY_CheckStateChanged);
+            this.chkDistortShearY.Click += new System.EventHandler(this.chkDistortShearY_Click);
             // 
             // chkDistortShearX
             // 
@@ -189,8 +191,10 @@ namespace ConTroll
             this.chkDistortShearX.Size = new System.Drawing.Size(104, 17);
             this.chkDistortShearX.TabIndex = 30;
             this.chkDistortShearX.Text = "Shear Horizontal";
+            this.chkDistortShearX.ThreeState = true;
             this.chkDistortShearX.UseVisualStyleBackColor = true;
-            this.chkDistortShearX.CheckedChanged += new System.EventHandler(this.chkDistortShearX_CheckedChanged);
+            this.chkDistortShearX.CheckStateChanged += new System.EventHandler(this.chkDistortShearX_CheckStateChanged);
+            this.chkDistortShearX.Click += new System.EventHandler(this.chkDistortShearX_Click);
             // 
             // chkDistortScaleY
             // 
@@ -200,8 +204,10 @@ namespace ConTroll
             this.chkDistortScaleY.Size = new System.Drawing.Size(96, 17);
             this.chkDistortScaleY.TabIndex = 29;
             this.chkDistortScaleY.Text = "Squish Vertical";
+            this.chkDistortScaleY.ThreeState = true;
             this.chkDistortScaleY.UseVisualStyleBackColor = true;
-            this.chkDistortScaleY.CheckedChanged += new System.EventHandler(this.chkDistortScaleY_CheckedChanged);
+            this.chkDistortScaleY.CheckStateChanged += new System.EventHandler(this.chkDistortScaleY_CheckStateChanged);
+            this.chkDistortScaleY.Click += new System.EventHandler(this.chkDistortScaleY_Click);
             // 
             // chkDistortScaleX
             // 
@@ -211,8 +217,10 @@ namespace ConTroll
             this.chkDistortScaleX.Size = new System.Drawing.Size(108, 17);
             this.chkDistortScaleX.TabIndex = 28;
             this.chkDistortScaleX.Text = "Squish Horizontal";
+            this.chkDistortScaleX.ThreeState = true;
             this.chkDistortScaleX.UseVisualStyleBackColor = true;
-            this.chkDistortScaleX.CheckedChanged += new System.EventHandler(this.chkDistortScaleX_CheckedChanged);
+            this.chkDistortScaleX.CheckStateChanged += new System.EventHandler(this.chkDistortScaleX_CheckStateChanged);
+            this.chkDistortScaleX.Click += new System.EventHandler(this.chkDistortScaleX_Click);
             // 
             // chkDistortZoom
             // 
@@ -222,8 +230,10 @@ namespace ConTroll
             this.chkDistortZoom.Size = new System.Drawing.Size(65, 17);
             this.chkDistortZoom.TabIndex = 27;
             this.chkDistortZoom.Text = "Zoom In";
+            this.chkDistortZoom.ThreeState = true;
             this.chkDistortZoom.UseVisualStyleBackColor = true;
-            this.chkDistortZoom.CheckedChanged += new System.EventHandler(this.chkDistortZoom_CheckedChanged);
+            this.chkDistortZoom.CheckStateChanged += new System.EventHandler(this.chkDistortZoom_CheckStateChanged);
+            this.chkDistortZoom.Click += new System.EventHandler(this.chkDistortZoom_Click);
             // 
             // chkDistortRotate
             // 
@@ -233,8 +243,10 @@ namespace ConTroll
             this.chkDistortRotate.Size = new System.Drawing.Size(79, 17);
             this.chkDistortRotate.TabIndex = 26;
             this.chkDistortRotate.Text = "Rotate 180";
+            this.chkDistortRotate.ThreeState = true;
             this.chkDistortRotate.UseVisualStyleBackColor = true;
-            this.chkDistortRotate.CheckedChanged += new System.EventHandler(this.chkDistortRotate_CheckedChanged);
+            this.chkDistortRotate.CheckStateChanged += new System.EventHandler(this.chkDistortRotate_CheckStateChanged);
+            this.chkDistortRotate.Click += new System.EventHandler(this.chkDistortRotate_Click);
             // 
             // chkDistortMirrorY
             // 
@@ -244,8 +256,10 @@ namespace ConTroll
             this.chkDistortMirrorY.Size = new System.Drawing.Size(90, 17);
             this.chkDistortMirrorY.TabIndex = 25;
             this.chkDistortMirrorY.Text = "Mirror Vertical";
+            this.chkDistortMirrorY.ThreeState = true;
             this.chkDistortMirrorY.UseVisualStyleBackColor = true;
-            this.chkDistortMirrorY.CheckedChanged += new System.EventHandler(this.chkDistortMirrorY_CheckedChanged);
+            this.chkDistortMirrorY.CheckStateChanged += new System.EventHandler(this.chkDistortMirrorY_CheckStateChanged);
+            this.chkDistortMirrorY.Click += new System.EventHandler(this.chkDistortMirrorY_Click);
             // 
             // chkDistortMirrorX
             // 
@@ -255,8 +269,10 @@ namespace ConTroll
             this.chkDistortMirrorX.Size = new System.Drawing.Size(102, 17);
             this.chkDistortMirrorX.TabIndex = 24;
             this.chkDistortMirrorX.Text = "Mirror Horizontal";
+            this.chkDistortMirrorX.ThreeState = true;
             this.chkDistortMirrorX.UseVisualStyleBackColor = true;
-            this.chkDistortMirrorX.CheckedChanged += new System.EventHandler(this.chkDistortMirrorX_CheckedChanged);
+            this.chkDistortMirrorX.CheckStateChanged += new System.EventHandler(this.chkDistortMirrorX_CheckStateChanged);
+            this.chkDistortMirrorX.Click += new System.EventHandler(this.chkDistortMirrorX_Click);
             // 
             // lblDistortInterval
             // 

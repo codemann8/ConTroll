@@ -12,7 +12,7 @@ namespace ConTroll.Properties {
     
     
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "16.10.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "17.2.0.0")]
     internal sealed partial class Settings : global::System.Configuration.ApplicationSettingsBase {
         
         private static Settings defaultInstance = ((Settings)(global::System.Configuration.ApplicationSettingsBase.Synchronized(new Settings())));
@@ -133,10 +133,10 @@ namespace ConTroll.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("True")]
-        public bool DistortMirrorX {
+        [global::System.Configuration.DefaultSettingValueAttribute("Indeterminate")]
+        public global::System.Windows.Forms.CheckState DistortMirrorX {
             get {
-                return ((bool)(this["DistortMirrorX"]));
+                return ((global::System.Windows.Forms.CheckState)(this["DistortMirrorX"]));
             }
             set {
                 this["DistortMirrorX"] = value;
@@ -145,10 +145,10 @@ namespace ConTroll.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("True")]
-        public bool DistortMirrorY {
+        [global::System.Configuration.DefaultSettingValueAttribute("Indeterminate")]
+        public global::System.Windows.Forms.CheckState DistortMirrorY {
             get {
-                return ((bool)(this["DistortMirrorY"]));
+                return ((global::System.Windows.Forms.CheckState)(this["DistortMirrorY"]));
             }
             set {
                 this["DistortMirrorY"] = value;
@@ -157,10 +157,10 @@ namespace ConTroll.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("True")]
-        public bool DistortRotate {
+        [global::System.Configuration.DefaultSettingValueAttribute("Indeterminate")]
+        public global::System.Windows.Forms.CheckState DistortRotate {
             get {
-                return ((bool)(this["DistortRotate"]));
+                return ((global::System.Windows.Forms.CheckState)(this["DistortRotate"]));
             }
             set {
                 this["DistortRotate"] = value;
@@ -169,10 +169,10 @@ namespace ConTroll.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("True")]
-        public bool DistortZoom {
+        [global::System.Configuration.DefaultSettingValueAttribute("Indeterminate")]
+        public global::System.Windows.Forms.CheckState DistortZoom {
             get {
-                return ((bool)(this["DistortZoom"]));
+                return ((global::System.Windows.Forms.CheckState)(this["DistortZoom"]));
             }
             set {
                 this["DistortZoom"] = value;
@@ -181,10 +181,10 @@ namespace ConTroll.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("True")]
-        public bool DistortScaleX {
+        [global::System.Configuration.DefaultSettingValueAttribute("Indeterminate")]
+        public global::System.Windows.Forms.CheckState DistortScaleX {
             get {
-                return ((bool)(this["DistortScaleX"]));
+                return ((global::System.Windows.Forms.CheckState)(this["DistortScaleX"]));
             }
             set {
                 this["DistortScaleX"] = value;
@@ -193,10 +193,10 @@ namespace ConTroll.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("True")]
-        public bool DistortScaleY {
+        [global::System.Configuration.DefaultSettingValueAttribute("Indeterminate")]
+        public global::System.Windows.Forms.CheckState DistortScaleY {
             get {
-                return ((bool)(this["DistortScaleY"]));
+                return ((global::System.Windows.Forms.CheckState)(this["DistortScaleY"]));
             }
             set {
                 this["DistortScaleY"] = value;
@@ -205,10 +205,10 @@ namespace ConTroll.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("True")]
-        public bool DistortShearX {
+        [global::System.Configuration.DefaultSettingValueAttribute("Indeterminate")]
+        public global::System.Windows.Forms.CheckState DistortShearX {
             get {
-                return ((bool)(this["DistortShearX"]));
+                return ((global::System.Windows.Forms.CheckState)(this["DistortShearX"]));
             }
             set {
                 this["DistortShearX"] = value;
@@ -217,10 +217,10 @@ namespace ConTroll.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("True")]
-        public bool DistortShearY {
+        [global::System.Configuration.DefaultSettingValueAttribute("Indeterminate")]
+        public global::System.Windows.Forms.CheckState DistortShearY {
             get {
-                return ((bool)(this["DistortShearY"]));
+                return ((global::System.Windows.Forms.CheckState)(this["DistortShearY"]));
             }
             set {
                 this["DistortShearY"] = value;

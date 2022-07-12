@@ -29,29 +29,29 @@
     <Setting Name="DistortInterval" Type="System.UInt32" Scope="User">
       <Value Profile="(Default)">60</Value>
     </Setting>
-    <Setting Name="DistortMirrorX" Type="System.Boolean" Scope="User">
-      <Value Profile="(Default)">True</Value>
+    <Setting Name="DistortMirrorX" Type="System.Windows.Forms.CheckState" Scope="User">
+      <Value Profile="(Default)">Indeterminate</Value>
     </Setting>
-    <Setting Name="DistortMirrorY" Type="System.Boolean" Scope="User">
-      <Value Profile="(Default)">True</Value>
+    <Setting Name="DistortMirrorY" Type="System.Windows.Forms.CheckState" Scope="User">
+      <Value Profile="(Default)">Indeterminate</Value>
     </Setting>
-    <Setting Name="DistortRotate" Type="System.Boolean" Scope="User">
-      <Value Profile="(Default)">True</Value>
+    <Setting Name="DistortRotate" Type="System.Windows.Forms.CheckState" Scope="User">
+      <Value Profile="(Default)">Indeterminate</Value>
     </Setting>
-    <Setting Name="DistortZoom" Type="System.Boolean" Scope="User">
-      <Value Profile="(Default)">True</Value>
+    <Setting Name="DistortZoom" Type="System.Windows.Forms.CheckState" Scope="User">
+      <Value Profile="(Default)">Indeterminate</Value>
     </Setting>
-    <Setting Name="DistortScaleX" Type="System.Boolean" Scope="User">
-      <Value Profile="(Default)">True</Value>
+    <Setting Name="DistortScaleX" Type="System.Windows.Forms.CheckState" Scope="User">
+      <Value Profile="(Default)">Indeterminate</Value>
     </Setting>
-    <Setting Name="DistortScaleY" Type="System.Boolean" Scope="User">
-      <Value Profile="(Default)">True</Value>
+    <Setting Name="DistortScaleY" Type="System.Windows.Forms.CheckState" Scope="User">
+      <Value Profile="(Default)">Indeterminate</Value>
     </Setting>
-    <Setting Name="DistortShearX" Type="System.Boolean" Scope="User">
-      <Value Profile="(Default)">True</Value>
+    <Setting Name="DistortShearX" Type="System.Windows.Forms.CheckState" Scope="User">
+      <Value Profile="(Default)">Indeterminate</Value>
     </Setting>
-    <Setting Name="DistortShearY" Type="System.Boolean" Scope="User">
-      <Value Profile="(Default)">True</Value>
+    <Setting Name="DistortShearY" Type="System.Windows.Forms.CheckState" Scope="User">
+      <Value Profile="(Default)">Indeterminate</Value>
     </Setting>
     <Setting Name="UpdateSettings" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">True</Value>
