@@ -36,7 +36,7 @@ namespace ConTroll
             //obs.StreamingStateChanged += onStreamingStateChange;
             //obs.RecordingStateChanged += onRecordingStateChange;
 
-            _obs.StreamStatus += onStreamData;
+            //_obs.StreamStatus += onStreamData;
         }
 
         public void Connect(string address, string password)
