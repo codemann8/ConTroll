@@ -87,31 +87,33 @@ namespace ConTroll
                 return false;
             }
 
-            if (_sni == null || _sni.Status == SNIClient.DeviceState.SNIOffline || _sni.Status == SNIClient.DeviceState.NoDevice)
+            if (MirrorModeFlippedX || MirrorModeFlippedY || MirrorModeRotated || Properties.Settings.Default.DistortMirrorX != CheckState.Unchecked || Properties.Settings.Default.DistortMirrorY != CheckState.Unchecked || Properties.Settings.Default.DistortRotate != CheckState.Unchecked)
             {
-                this.Message = "No devices are detected thru SNI";
-                return false;
-            }
+                if (_sni == null || _sni.Status == SNIClient.DeviceState.SNIOffline || _sni.Status == SNIClient.DeviceState.NoDevice)
+                {
+                    this.Message = "No devices are detected thru SNI";
+                    return false;
+                }
 
-            if (_sni.Status == SNIClient.DeviceState.DeviceRunning || _sni.Status == SNIClient.DeviceState.DeviceRunningLive)
-            {
-                string header = _sni.GetROMHeader();
-                if (header == "NO-ROM" || header.StartsWith("NO-CONF-"))
+                if (_sni.Status == SNIClient.DeviceState.DeviceRunning || _sni.Status == SNIClient.DeviceState.DeviceRunningLive)
                 {
-                    this.Message = "No ROM detected. If the ROM is loaded, try restarting SNI.";
+                    string header = _sni.GetROMHeader();
+                    if (header == "NO-ROM" || header.StartsWith("NO-CONF-"))
+                    {
+                        this.Message = "No ROM detected. If the ROM is loaded, try restarting SNI.";
+                        return false;
+                    }
+                    if (!header.EndsWith("O"))
+                    {
+                        this.Message = "Mirroring and Rotating is incompatible with this ROM. Currently only seeds generated from the OWR branch are compatible. Try disabling Mirroring and Rotating effects.";
+                        return false;
+                    }
+                }
+                else
+                {
+                    this.Message = "No ROM detected. If the ROM is loaded, try power-cycling the console and SNI.";
                     return false;
                 }
-                if ((Properties.Settings.Default.DistortMirrorX || Properties.Settings.Default.DistortMirrorY || Properties.Settings.Default.DistortRotate)
-                    && !header.EndsWith("O"))
-                {
-                    this.Message = "Mirroring and Rotating is incompatible with this ROM. Currently only seeds generated from the OWR branch are compatible. Try disabling Mirroring and Rotating effects.";
-                    return false;
-                }
-            }
-            else
-            {
-                this.Message = "No ROM detected. If the ROM is loaded, try power-cycling the console and SNI.";
-                return false;
             }
 
             try
@@ -220,7 +222,10 @@ namespace ConTroll
         {
             DistortionActionArgs actionArgs = new DistortionActionArgs(args);
 
-            if (!actionArgs.ShouldReset && _sni != null)
+            bool InputsFlipped = MirrorModeFlippedX || MirrorModeFlippedY || MirrorModeRotated;
+            bool InputsMightFlip = Properties.Settings.Default.DistortMirrorX != CheckState.Unchecked || Properties.Settings.Default.DistortMirrorY != CheckState.Unchecked || Properties.Settings.Default.DistortRotate != CheckState.Unchecked;
+
+            if (!actionArgs.ShouldReset && _sni != null && (InputsFlipped || InputsMightFlip))
             {
                 switch (_sni.Status)
                 {
@@ -303,9 +308,6 @@ namespace ConTroll
             }
             else
             {
-                //play sound
-                Random r = new Random();
-                if (Properties.Settings.Default.DistortInterval >= 10)
                 _obs._obs.SetSourceFilterVisibility(Properties.Settings.Default.OBSGameSource, DISTORT_FILTER, true);
                 List<DistortEffect> effects = new List<DistortEffect>();
                 if (Properties.Settings.Default.DistortMirrorX == CheckState.Indeterminate) effects.Add(DistortEffect.MirrorX);
@@ -325,54 +327,60 @@ namespace ConTroll
                 if (Properties.Settings.Default.DistortShearY == CheckState.Indeterminate) effects.Add(DistortEffect.ShearY);
                 else MirrorModeShearedY = Properties.Settings.Default.DistortShearY == CheckState.Checked;
 
+                if (effects.Count > 0)
                 {
-                    int i = r.Next(0, DistortSounds.Length);
-                    if (DistortSounds[i].Stream != null)
+                    //play sound
+                    Random r = new Random();
+                    if (Properties.Settings.Default.DistortInterval >= 10)
                     {
-                        DistortSounds[i].Stream.Position = 0;
+                        int i = r.Next(0, DistortSounds.Length);
+                        if (DistortSounds[i].Stream != null)
+                        {
+                            DistortSounds[i].Stream.Position = 0;
+                        }
+                        using (System.Media.SoundPlayer player = new System.Media.SoundPlayer(DistortSounds[i].Stream))
+                        {
+                            player.Play();
+                        };
+                        System.Threading.Thread.Sleep(DistortSounds[i].Duration);
                     }
-                    using (System.Media.SoundPlayer player = new System.Media.SoundPlayer(DistortSounds[i].Stream))
+
+                    //randomly flip one setting
+                    switch (effects[r.Next(0, effects.Count)])
                     {
-                        player.Play();
-                    };
-                    System.Threading.Thread.Sleep(DistortSounds[i].Duration);
-                }
+                        case DistortEffect.MirrorX:
+                            MirrorModeFlippedX = !MirrorModeFlippedX;
+                            break;
+                        case DistortEffect.MirrorY:
+                            MirrorModeFlippedY = !MirrorModeFlippedY;
+                            break;
+                        case DistortEffect.Rotate:
+                            MirrorModeRotated = !MirrorModeRotated;
+                            MirrorModeTiltDir = r.Next() % 2 == 0;
+                            break;
+                        case DistortEffect.Zoom:
+                            MirrorModeZoomed = !MirrorModeZoomed;
+                            break;
+                        case DistortEffect.ScaleX:
+                            MirrorModeScaledX = !MirrorModeScaledX;
+                            break;
+                        case DistortEffect.ScaleY:
+                            MirrorModeScaledY = !MirrorModeScaledY;
+                            break;
+                        case DistortEffect.ShearX:
+                            MirrorModeShearedX = !MirrorModeShearedX;
+                            break;
+                        case DistortEffect.ShearY:
+                            MirrorModeShearedY = !MirrorModeShearedY;
+                            break;
+                    }
 
-                //randomly flip one setting
-                switch (effects[r.Next(0, effects.Count)])
-                {
-                    case DistortEffect.MirrorX:
-                        MirrorModeFlippedX = !MirrorModeFlippedX;
-                        break;
-                    case DistortEffect.MirrorY:
-                        MirrorModeFlippedY = !MirrorModeFlippedY;
-                        break;
-                    case DistortEffect.Rotate:
-                        MirrorModeRotated = !MirrorModeRotated;
+                    if (!MirrorModeRotated)
+                    {
                         MirrorModeTiltDir = r.Next() % 2 == 0;
-                        break;
-                    case DistortEffect.Zoom:
-                        MirrorModeZoomed = !MirrorModeZoomed;
-                        break;
-                    case DistortEffect.ScaleX:
-                        MirrorModeScaledX = !MirrorModeScaledX;
-                        break;
-                    case DistortEffect.ScaleY:
-                        MirrorModeScaledY = !MirrorModeScaledY;
-                        break;
-                    case DistortEffect.ShearX:
-                        MirrorModeShearedX = !MirrorModeShearedX;
-                        break;
-                    case DistortEffect.ShearY:
-                        MirrorModeShearedY = !MirrorModeShearedY;
-                        break;
+                    }
+                    MirrorModeTilt = r.NextDouble() * Properties.Settings.Default.DistortTilt;
                 }
-
-                if (!MirrorModeRotated)
-                {
-                    MirrorModeTiltDir = r.Next() % 2 == 0;
-                }
-                MirrorModeTilt = r.NextDouble() * Properties.Settings.Default.DistortTilt;
             }
 
             //set animation destination settings to OBS filter
@@ -406,7 +414,7 @@ namespace ConTroll
             _obs._obs.SetSourceFilterVisibility(Properties.Settings.Default.OBSGameSource, DISTORT_MOVE_FILTER, true);
 
             //change inputs
-            if (_sni != null && (_sni.Status == SNIClient.DeviceState.DeviceRunning || _sni.Status == SNIClient.DeviceState.DeviceRunningLive))
+            if (_sni != null && (_sni.Status == SNIClient.DeviceState.DeviceRunning || _sni.Status == SNIClient.DeviceState.DeviceRunningLive) && (InputsFlipped || InputsMightFlip))
             {
                 bool InputsFlippedLR = MirrorModeFlippedY ^ MirrorModeRotated;
                 bool InputsFlippedUD = MirrorModeFlippedX ^ MirrorModeRotated;
