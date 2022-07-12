@@ -56,5 +56,11 @@
     <Setting Name="UpdateSettings" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">True</Value>
     </Setting>
+    <Setting Name="DistortColor" Type="System.Windows.Forms.CheckState" Scope="User">
+      <Value Profile="(Default)">Checked</Value>
+    </Setting>
+    <Setting Name="DistortColorDuration" Type="System.UInt32" Scope="User">
+      <Value Profile="(Default)">8000</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

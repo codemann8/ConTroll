@@ -76,6 +76,9 @@ namespace ConTroll
             this.btnOBSStatus = new System.Windows.Forms.ToolStripDropDownButton();
             this.lblOBSStatus = new System.Windows.Forms.ToolStripStatusLabel();
             this.tooltip = new System.Windows.Forms.ToolTip(this.components);
+            this.chkDistortColor = new System.Windows.Forms.CheckBox();
+            this.lblDistortColorDuration = new System.Windows.Forms.Label();
+            this.txtDistortColorDuration = new System.Windows.Forms.TextBox();
             this.tabbarMain.SuspendLayout();
             this.tabMain.SuspendLayout();
             this.tabConfig.SuspendLayout();
@@ -96,7 +99,7 @@ namespace ConTroll
             this.tabbarMain.Location = new System.Drawing.Point(0, 0);
             this.tabbarMain.Name = "tabbarMain";
             this.tabbarMain.SelectedIndex = 0;
-            this.tabbarMain.Size = new System.Drawing.Size(294, 216);
+            this.tabbarMain.Size = new System.Drawing.Size(294, 226);
             this.tabbarMain.TabIndex = 0;
             // 
             // tabMain
@@ -106,7 +109,7 @@ namespace ConTroll
             this.tabMain.Location = new System.Drawing.Point(4, 22);
             this.tabMain.Name = "tabMain";
             this.tabMain.Padding = new System.Windows.Forms.Padding(3);
-            this.tabMain.Size = new System.Drawing.Size(286, 190);
+            this.tabMain.Size = new System.Drawing.Size(286, 200);
             this.tabMain.TabIndex = 0;
             this.tabMain.Text = "Main";
             this.tabMain.UseVisualStyleBackColor = true;
@@ -138,13 +141,16 @@ namespace ConTroll
             this.tabConfig.Location = new System.Drawing.Point(4, 22);
             this.tabConfig.Name = "tabConfig";
             this.tabConfig.Padding = new System.Windows.Forms.Padding(3);
-            this.tabConfig.Size = new System.Drawing.Size(286, 190);
+            this.tabConfig.Size = new System.Drawing.Size(286, 200);
             this.tabConfig.TabIndex = 2;
             this.tabConfig.Text = "Config";
             this.tabConfig.UseVisualStyleBackColor = true;
             // 
             // grpDistortion
             // 
+            this.grpDistortion.Controls.Add(this.lblDistortColorDuration);
+            this.grpDistortion.Controls.Add(this.txtDistortColorDuration);
+            this.grpDistortion.Controls.Add(this.chkDistortColor);
             this.grpDistortion.Controls.Add(this.chkDistortShearY);
             this.grpDistortion.Controls.Add(this.chkDistortShearX);
             this.grpDistortion.Controls.Add(this.chkDistortScaleY);
@@ -163,9 +169,9 @@ namespace ConTroll
             this.grpDistortion.Controls.Add(this.txtDistortTilt);
             this.grpDistortion.Controls.Add(this.lblDistortDuration);
             this.grpDistortion.Controls.Add(this.txtDistortDuration);
-            this.grpDistortion.Location = new System.Drawing.Point(10, 33);
+            this.grpDistortion.Location = new System.Drawing.Point(6, 33);
             this.grpDistortion.Name = "grpDistortion";
-            this.grpDistortion.Size = new System.Drawing.Size(269, 151);
+            this.grpDistortion.Size = new System.Drawing.Size(273, 163);
             this.grpDistortion.TabIndex = 2;
             this.grpDistortion.TabStop = false;
             this.grpDistortion.Text = "Social Distortion";
@@ -173,10 +179,10 @@ namespace ConTroll
             // chkDistortShearY
             // 
             this.chkDistortShearY.AutoSize = true;
-            this.chkDistortShearY.Location = new System.Drawing.Point(156, 130);
+            this.chkDistortShearY.Location = new System.Drawing.Point(150, 124);
             this.chkDistortShearY.Name = "chkDistortShearY";
             this.chkDistortShearY.Size = new System.Drawing.Size(92, 17);
-            this.chkDistortShearY.TabIndex = 31;
+            this.chkDistortShearY.TabIndex = 30;
             this.chkDistortShearY.Text = "Shear Vertical";
             this.chkDistortShearY.ThreeState = true;
             this.chkDistortShearY.UseVisualStyleBackColor = true;
@@ -186,10 +192,10 @@ namespace ConTroll
             // chkDistortShearX
             // 
             this.chkDistortShearX.AutoSize = true;
-            this.chkDistortShearX.Location = new System.Drawing.Point(156, 114);
+            this.chkDistortShearX.Location = new System.Drawing.Point(150, 109);
             this.chkDistortShearX.Name = "chkDistortShearX";
             this.chkDistortShearX.Size = new System.Drawing.Size(104, 17);
-            this.chkDistortShearX.TabIndex = 30;
+            this.chkDistortShearX.TabIndex = 29;
             this.chkDistortShearX.Text = "Shear Horizontal";
             this.chkDistortShearX.ThreeState = true;
             this.chkDistortShearX.UseVisualStyleBackColor = true;
@@ -199,10 +205,10 @@ namespace ConTroll
             // chkDistortScaleY
             // 
             this.chkDistortScaleY.AutoSize = true;
-            this.chkDistortScaleY.Location = new System.Drawing.Point(156, 98);
+            this.chkDistortScaleY.Location = new System.Drawing.Point(150, 94);
             this.chkDistortScaleY.Name = "chkDistortScaleY";
             this.chkDistortScaleY.Size = new System.Drawing.Size(96, 17);
-            this.chkDistortScaleY.TabIndex = 29;
+            this.chkDistortScaleY.TabIndex = 28;
             this.chkDistortScaleY.Text = "Squish Vertical";
             this.chkDistortScaleY.ThreeState = true;
             this.chkDistortScaleY.UseVisualStyleBackColor = true;
@@ -212,10 +218,10 @@ namespace ConTroll
             // chkDistortScaleX
             // 
             this.chkDistortScaleX.AutoSize = true;
-            this.chkDistortScaleX.Location = new System.Drawing.Point(156, 82);
+            this.chkDistortScaleX.Location = new System.Drawing.Point(150, 79);
             this.chkDistortScaleX.Name = "chkDistortScaleX";
             this.chkDistortScaleX.Size = new System.Drawing.Size(108, 17);
-            this.chkDistortScaleX.TabIndex = 28;
+            this.chkDistortScaleX.TabIndex = 27;
             this.chkDistortScaleX.Text = "Squish Horizontal";
             this.chkDistortScaleX.ThreeState = true;
             this.chkDistortScaleX.UseVisualStyleBackColor = true;
@@ -225,10 +231,10 @@ namespace ConTroll
             // chkDistortZoom
             // 
             this.chkDistortZoom.AutoSize = true;
-            this.chkDistortZoom.Location = new System.Drawing.Point(156, 66);
+            this.chkDistortZoom.Location = new System.Drawing.Point(150, 64);
             this.chkDistortZoom.Name = "chkDistortZoom";
             this.chkDistortZoom.Size = new System.Drawing.Size(65, 17);
-            this.chkDistortZoom.TabIndex = 27;
+            this.chkDistortZoom.TabIndex = 26;
             this.chkDistortZoom.Text = "Zoom In";
             this.chkDistortZoom.ThreeState = true;
             this.chkDistortZoom.UseVisualStyleBackColor = true;
@@ -238,10 +244,10 @@ namespace ConTroll
             // chkDistortRotate
             // 
             this.chkDistortRotate.AutoSize = true;
-            this.chkDistortRotate.Location = new System.Drawing.Point(156, 50);
+            this.chkDistortRotate.Location = new System.Drawing.Point(150, 49);
             this.chkDistortRotate.Name = "chkDistortRotate";
             this.chkDistortRotate.Size = new System.Drawing.Size(79, 17);
-            this.chkDistortRotate.TabIndex = 26;
+            this.chkDistortRotate.TabIndex = 25;
             this.chkDistortRotate.Text = "Rotate 180";
             this.chkDistortRotate.ThreeState = true;
             this.chkDistortRotate.UseVisualStyleBackColor = true;
@@ -251,10 +257,10 @@ namespace ConTroll
             // chkDistortMirrorY
             // 
             this.chkDistortMirrorY.AutoSize = true;
-            this.chkDistortMirrorY.Location = new System.Drawing.Point(156, 34);
+            this.chkDistortMirrorY.Location = new System.Drawing.Point(150, 34);
             this.chkDistortMirrorY.Name = "chkDistortMirrorY";
             this.chkDistortMirrorY.Size = new System.Drawing.Size(90, 17);
-            this.chkDistortMirrorY.TabIndex = 25;
+            this.chkDistortMirrorY.TabIndex = 24;
             this.chkDistortMirrorY.Text = "Mirror Vertical";
             this.chkDistortMirrorY.ThreeState = true;
             this.chkDistortMirrorY.UseVisualStyleBackColor = true;
@@ -264,10 +270,10 @@ namespace ConTroll
             // chkDistortMirrorX
             // 
             this.chkDistortMirrorX.AutoSize = true;
-            this.chkDistortMirrorX.Location = new System.Drawing.Point(156, 18);
+            this.chkDistortMirrorX.Location = new System.Drawing.Point(150, 19);
             this.chkDistortMirrorX.Name = "chkDistortMirrorX";
             this.chkDistortMirrorX.Size = new System.Drawing.Size(102, 17);
-            this.chkDistortMirrorX.TabIndex = 24;
+            this.chkDistortMirrorX.TabIndex = 23;
             this.chkDistortMirrorX.Text = "Mirror Horizontal";
             this.chkDistortMirrorX.ThreeState = true;
             this.chkDistortMirrorX.UseVisualStyleBackColor = true;
@@ -277,96 +283,96 @@ namespace ConTroll
             // lblDistortInterval
             // 
             this.lblDistortInterval.AutoSize = true;
-            this.lblDistortInterval.Location = new System.Drawing.Point(33, 22);
+            this.lblDistortInterval.Location = new System.Drawing.Point(34, 20);
             this.lblDistortInterval.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.lblDistortInterval.Name = "lblDistortInterval";
             this.lblDistortInterval.Size = new System.Drawing.Size(45, 13);
-            this.lblDistortInterval.TabIndex = 23;
+            this.lblDistortInterval.TabIndex = 0;
             this.lblDistortInterval.Text = "Interval:";
             // 
             // txtDistortInterval
             // 
             this.txtDistortInterval.ForeColor = System.Drawing.SystemColors.WindowText;
-            this.txtDistortInterval.Location = new System.Drawing.Point(83, 19);
+            this.txtDistortInterval.Location = new System.Drawing.Point(81, 17);
             this.txtDistortInterval.Name = "txtDistortInterval";
             this.txtDistortInterval.Size = new System.Drawing.Size(56, 20);
-            this.txtDistortInterval.TabIndex = 0;
+            this.txtDistortInterval.TabIndex = 1;
             this.txtDistortInterval.TextChanged += new System.EventHandler(this.txtDistortInterval_TextChanged);
             // 
             // lblDistortAdjustY
             // 
             this.lblDistortAdjustY.AutoSize = true;
-            this.lblDistortAdjustY.Location = new System.Drawing.Point(6, 126);
+            this.lblDistortAdjustY.Location = new System.Drawing.Point(7, 116);
             this.lblDistortAdjustY.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.lblDistortAdjustY.Name = "lblDistortAdjustY";
             this.lblDistortAdjustY.Size = new System.Drawing.Size(72, 13);
-            this.lblDistortAdjustY.TabIndex = 21;
+            this.lblDistortAdjustY.TabIndex = 8;
             this.lblDistortAdjustY.Text = "Y Adjustment:";
             // 
             // txtDistortAdjustY
             // 
             this.txtDistortAdjustY.ForeColor = System.Drawing.SystemColors.WindowText;
-            this.txtDistortAdjustY.Location = new System.Drawing.Point(83, 123);
+            this.txtDistortAdjustY.Location = new System.Drawing.Point(81, 113);
             this.txtDistortAdjustY.Name = "txtDistortAdjustY";
             this.txtDistortAdjustY.Size = new System.Drawing.Size(56, 20);
-            this.txtDistortAdjustY.TabIndex = 4;
+            this.txtDistortAdjustY.TabIndex = 9;
             this.txtDistortAdjustY.TextChanged += new System.EventHandler(this.txtDistortAdjustY_TextChanged);
             // 
             // lblDistortAdjustX
             // 
             this.lblDistortAdjustX.AutoSize = true;
-            this.lblDistortAdjustX.Location = new System.Drawing.Point(6, 100);
+            this.lblDistortAdjustX.Location = new System.Drawing.Point(7, 92);
             this.lblDistortAdjustX.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.lblDistortAdjustX.Name = "lblDistortAdjustX";
             this.lblDistortAdjustX.Size = new System.Drawing.Size(72, 13);
-            this.lblDistortAdjustX.TabIndex = 19;
+            this.lblDistortAdjustX.TabIndex = 6;
             this.lblDistortAdjustX.Text = "X Adjustment:";
             // 
             // txtDistortAdjustX
             // 
             this.txtDistortAdjustX.ForeColor = System.Drawing.SystemColors.WindowText;
-            this.txtDistortAdjustX.Location = new System.Drawing.Point(83, 97);
+            this.txtDistortAdjustX.Location = new System.Drawing.Point(81, 89);
             this.txtDistortAdjustX.Name = "txtDistortAdjustX";
             this.txtDistortAdjustX.Size = new System.Drawing.Size(56, 20);
-            this.txtDistortAdjustX.TabIndex = 3;
+            this.txtDistortAdjustX.TabIndex = 7;
             this.txtDistortAdjustX.TextChanged += new System.EventHandler(this.txtDistortAdjustX_TextChanged);
             // 
             // lblDistortTilt
             // 
             this.lblDistortTilt.AutoSize = true;
-            this.lblDistortTilt.Location = new System.Drawing.Point(31, 74);
+            this.lblDistortTilt.Location = new System.Drawing.Point(32, 68);
             this.lblDistortTilt.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.lblDistortTilt.Name = "lblDistortTilt";
             this.lblDistortTilt.Size = new System.Drawing.Size(47, 13);
-            this.lblDistortTilt.TabIndex = 17;
+            this.lblDistortTilt.TabIndex = 4;
             this.lblDistortTilt.Text = "Max Tilt:";
             // 
             // txtDistortTilt
             // 
             this.txtDistortTilt.ForeColor = System.Drawing.SystemColors.WindowText;
-            this.txtDistortTilt.Location = new System.Drawing.Point(83, 71);
+            this.txtDistortTilt.Location = new System.Drawing.Point(81, 65);
             this.txtDistortTilt.Name = "txtDistortTilt";
             this.txtDistortTilt.Size = new System.Drawing.Size(56, 20);
-            this.txtDistortTilt.TabIndex = 2;
+            this.txtDistortTilt.TabIndex = 5;
             this.txtDistortTilt.TextChanged += new System.EventHandler(this.txtDistortTilt_TextChanged);
             // 
             // lblDistortDuration
             // 
             this.lblDistortDuration.AutoSize = true;
-            this.lblDistortDuration.Location = new System.Drawing.Point(28, 48);
+            this.lblDistortDuration.Location = new System.Drawing.Point(29, 44);
             this.lblDistortDuration.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.lblDistortDuration.Name = "lblDistortDuration";
             this.lblDistortDuration.Size = new System.Drawing.Size(50, 13);
-            this.lblDistortDuration.TabIndex = 15;
+            this.lblDistortDuration.TabIndex = 2;
             this.lblDistortDuration.Text = "Duration:";
             // 
             // txtDistortDuration
             // 
             this.txtDistortDuration.ForeColor = System.Drawing.SystemColors.WindowText;
-            this.txtDistortDuration.Location = new System.Drawing.Point(83, 45);
+            this.txtDistortDuration.Location = new System.Drawing.Point(81, 41);
             this.txtDistortDuration.Name = "txtDistortDuration";
             this.txtDistortDuration.Size = new System.Drawing.Size(56, 20);
-            this.txtDistortDuration.TabIndex = 1;
+            this.txtDistortDuration.TabIndex = 3;
             this.txtDistortDuration.TextChanged += new System.EventHandler(this.txtDistortDuration_TextChanged);
             // 
             // lblOBSGameSource
@@ -375,7 +381,7 @@ namespace ConTroll
             this.lblOBSGameSource.Location = new System.Drawing.Point(7, 9);
             this.lblOBSGameSource.Name = "lblOBSGameSource";
             this.lblOBSGameSource.Size = new System.Drawing.Size(75, 13);
-            this.lblOBSGameSource.TabIndex = 1;
+            this.lblOBSGameSource.TabIndex = 0;
             this.lblOBSGameSource.Text = "Game Source:";
             // 
             // cboOBSGameSource
@@ -385,7 +391,7 @@ namespace ConTroll
             this.cboOBSGameSource.Location = new System.Drawing.Point(88, 6);
             this.cboOBSGameSource.Name = "cboOBSGameSource";
             this.cboOBSGameSource.Size = new System.Drawing.Size(145, 21);
-            this.cboOBSGameSource.TabIndex = 0;
+            this.cboOBSGameSource.TabIndex = 1;
             this.cboOBSGameSource.DropDown += new System.EventHandler(this.cboOBSGameSource_DropDown);
             this.cboOBSGameSource.SelectedIndexChanged += new System.EventHandler(this.cboOBSGameSource_SelectedIndexChanged);
             // 
@@ -396,7 +402,7 @@ namespace ConTroll
             this.tabConnection.Location = new System.Drawing.Point(4, 22);
             this.tabConnection.Name = "tabConnection";
             this.tabConnection.Padding = new System.Windows.Forms.Padding(3);
-            this.tabConnection.Size = new System.Drawing.Size(286, 190);
+            this.tabConnection.Size = new System.Drawing.Size(286, 200);
             this.tabConnection.TabIndex = 1;
             this.tabConnection.Text = "Connection";
             this.tabConnection.UseVisualStyleBackColor = true;
@@ -524,10 +530,10 @@ namespace ConTroll
             this.lblSNIStatus,
             this.btnOBSStatus,
             this.lblOBSStatus});
-            this.stsMain.Location = new System.Drawing.Point(0, 214);
+            this.stsMain.Location = new System.Drawing.Point(0, 224);
             this.stsMain.Name = "stsMain";
             this.stsMain.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
-            this.stsMain.Size = new System.Drawing.Size(294, 24);
+            this.stsMain.Size = new System.Drawing.Size(292, 24);
             this.stsMain.TabIndex = 1;
             // 
             // btnSNIStatus
@@ -573,11 +579,43 @@ namespace ConTroll
             // 
             this.tooltip.ShowAlways = true;
             // 
+            // chkDistortColor
+            // 
+            this.chkDistortColor.AutoSize = true;
+            this.chkDistortColor.Location = new System.Drawing.Point(150, 139);
+            this.chkDistortColor.Name = "chkDistortColor";
+            this.chkDistortColor.Size = new System.Drawing.Size(63, 17);
+            this.chkDistortColor.TabIndex = 31;
+            this.chkDistortColor.Text = "Colorize";
+            this.chkDistortColor.ThreeState = true;
+            this.chkDistortColor.UseVisualStyleBackColor = true;
+            this.chkDistortColor.CheckStateChanged += new System.EventHandler(this.chkDistortColor_CheckStateChanged);
+            this.chkDistortColor.Click += new System.EventHandler(this.chkDistortColor_Click);
+            // 
+            // lblDistortColorDuration
+            // 
+            this.lblDistortColorDuration.AutoSize = true;
+            this.lblDistortColorDuration.Location = new System.Drawing.Point(2, 140);
+            this.lblDistortColorDuration.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.lblDistortColorDuration.Name = "lblDistortColorDuration";
+            this.lblDistortColorDuration.Size = new System.Drawing.Size(77, 13);
+            this.lblDistortColorDuration.TabIndex = 10;
+            this.lblDistortColorDuration.Text = "Color Duration:";
+            // 
+            // txtDistortColorDuration
+            // 
+            this.txtDistortColorDuration.ForeColor = System.Drawing.SystemColors.WindowText;
+            this.txtDistortColorDuration.Location = new System.Drawing.Point(81, 137);
+            this.txtDistortColorDuration.Name = "txtDistortColorDuration";
+            this.txtDistortColorDuration.Size = new System.Drawing.Size(56, 20);
+            this.txtDistortColorDuration.TabIndex = 11;
+            this.txtDistortColorDuration.TextChanged += new System.EventHandler(this.txtDistortColorDuration_TextChanged);
+            // 
             // Main
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(294, 238);
+            this.ClientSize = new System.Drawing.Size(292, 248);
             this.Controls.Add(this.stsMain);
             this.Controls.Add(this.tabbarMain);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
@@ -652,6 +690,9 @@ namespace ConTroll
         private System.Windows.Forms.Label lblDevices;
         private System.Windows.Forms.ComboBox cboDevices;
         public System.Windows.Forms.ToolTip tooltip;
+        private System.Windows.Forms.CheckBox chkDistortColor;
+        private System.Windows.Forms.Label lblDistortColorDuration;
+        private System.Windows.Forms.TextBox txtDistortColorDuration;
     }
 }
 

@@ -238,5 +238,29 @@ namespace ConTroll.Properties {
                 this["UpdateSettings"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Checked")]
+        public global::System.Windows.Forms.CheckState DistortColor {
+            get {
+                return ((global::System.Windows.Forms.CheckState)(this["DistortColor"]));
+            }
+            set {
+                this["DistortColor"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("8000")]
+        public uint DistortColorDuration {
+            get {
+                return ((uint)(this["DistortColorDuration"]));
+            }
+            set {
+                this["DistortColorDuration"] = value;
+            }
+        }
     }
 }

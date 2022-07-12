@@ -106,6 +106,7 @@ namespace ConTroll
             txtDistortTilt.Text = Properties.Settings.Default.DistortTilt.ToString();
             txtDistortAdjustX.Text = Properties.Settings.Default.DistortAdjustX.ToString();
             txtDistortAdjustY.Text = Properties.Settings.Default.DistortAdjustY.ToString();
+            txtDistortColorDuration.Text = Properties.Settings.Default.DistortColorDuration.ToString();
 
             chkDistortMirrorX.CheckState = Properties.Settings.Default.DistortMirrorX;
             chkDistortMirrorY.CheckState = Properties.Settings.Default.DistortMirrorY;
@@ -115,6 +116,7 @@ namespace ConTroll
             chkDistortScaleY.CheckState = Properties.Settings.Default.DistortScaleY;
             chkDistortShearX.CheckState = Properties.Settings.Default.DistortShearX;
             chkDistortShearY.CheckState = Properties.Settings.Default.DistortShearY;
+            chkDistortColor.CheckState = Properties.Settings.Default.DistortColor;
 
             value = Properties.Settings.Default.OBSGameSource;
             if (value != "")
@@ -254,6 +256,14 @@ namespace ConTroll
             Double value = 0;
             Double.TryParse(txtDistortAdjustY.Text, out value);
             Properties.Settings.Default.DistortAdjustY = value;
+            Properties.Settings.Default.Save();
+        }
+
+        private void txtDistortColorDuration_TextChanged(object sender, EventArgs e)
+        {
+            uint value = 0;
+            UInt32.TryParse(txtDistortColorDuration.Text, out value);
+            Properties.Settings.Default.DistortColorDuration = value;
             Properties.Settings.Default.Save();
         }
 
