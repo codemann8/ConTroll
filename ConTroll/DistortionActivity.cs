@@ -449,15 +449,15 @@ namespace ConTroll
             //set animation destination settings to OBS filter
             FilterSettings filter = _obs._obs.GetSourceFilterInfo(Properties.Settings.Default.OBSGameSource, DISTORT_MOVE_FILTER);
             OBSConnect.AddOrReplaceProperty(filter.Settings, "duration", Properties.Settings.Default.DistortDuration);
-            OBSConnect.AddOrReplaceProperty(filter.Settings, "Position.X", MirrorModeFlippedY ^ MirrorModeRotated ? Properties.Settings.Default.DistortAdjustX : 0.0);
-            OBSConnect.AddOrReplaceProperty(filter.Settings, "Position.Y", MirrorModeFlippedX ^ MirrorModeRotated ? Properties.Settings.Default.DistortAdjustY : 0.0);
+            OBSConnect.AddOrReplaceProperty(filter.Settings, "Position.X", MirrorModeFlippedX ^ MirrorModeRotated ? Properties.Settings.Default.DistortAdjustX : 0.0);
+            OBSConnect.AddOrReplaceProperty(filter.Settings, "Position.Y", MirrorModeFlippedY ^ MirrorModeRotated ? Properties.Settings.Default.DistortAdjustY : 0.0);
             OBSConnect.AddOrReplaceProperty(filter.Settings, "Position.Z", MirrorModeZoomed ? 33.0 : 0.0);
             OBSConnect.AddOrReplaceProperty(filter.Settings, "Scale.X", MirrorModeScaledX ? 66.0 : 100.0);
             OBSConnect.AddOrReplaceProperty(filter.Settings, "Scale.Y", MirrorModeScaledY ? 66.0 : 100.0);
             OBSConnect.AddOrReplaceProperty(filter.Settings, "Shear.X", MirrorModeShearedX ? 33.0 : 0.0);
             OBSConnect.AddOrReplaceProperty(filter.Settings, "Shear.Y", MirrorModeShearedY ? 33.0 : 0.0);
-            OBSConnect.AddOrReplaceProperty(filter.Settings, "Rotation.X", MirrorModeFlippedX ? 180.0 : 0.0);
-            OBSConnect.AddOrReplaceProperty(filter.Settings, "Rotation.Y", MirrorModeFlippedY ? 180.0 : 0.0);
+            OBSConnect.AddOrReplaceProperty(filter.Settings, "Rotation.X", MirrorModeFlippedY ? 180.0 : 0.0);
+            OBSConnect.AddOrReplaceProperty(filter.Settings, "Rotation.Y", MirrorModeFlippedX ? 180.0 : 0.0);
             OBSConnect.AddOrReplaceProperty(filter.Settings, "Rotation.Z", MirrorModeRotated ? (MirrorModeTiltDir ? -180.0 : 180.0) : 0.0);
             _obs._obs.SetSourceFilterSettings(Properties.Settings.Default.OBSGameSource, DISTORT_MOVE_FILTER, filter.Settings);
 
@@ -486,8 +486,8 @@ namespace ConTroll
             //change inputs
             if (_sni != null && (_sni.Status == SNIClient.DeviceState.DeviceRunning || _sni.Status == SNIClient.DeviceState.DeviceRunningLive) && (InputsFlipped || InputsMightFlip))
             {
-                bool InputsFlippedLR = MirrorModeFlippedY ^ MirrorModeRotated;
-                bool InputsFlippedUD = MirrorModeFlippedX ^ MirrorModeRotated;
+                bool InputsFlippedLR = MirrorModeFlippedX ^ MirrorModeRotated;
+                bool InputsFlippedUD = MirrorModeFlippedY ^ MirrorModeRotated;
 
                 byte value = 0;
                 switch ((InputsFlippedLR ? 1 : 0) + (InputsFlippedUD ? 2 : 0))
