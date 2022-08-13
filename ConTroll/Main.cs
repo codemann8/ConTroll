@@ -17,6 +17,7 @@ namespace ConTroll
         public SNIClient _sni;
         public OBSConnect _obs;
         public DistortionActivity _distort;
+        public Database _database;
 
         public Main()
         {
@@ -69,29 +70,22 @@ namespace ConTroll
 
         private void LoadSettings()
         {
-            if (Properties.Settings.Default.UpdateSettings)
-            {
-                Properties.Settings.Default.Upgrade();
-                Properties.Settings.Default.UpdateSettings = false;
-                Properties.Settings.Default.Save();
-            }
+            _database = new Database();
 
-            string value = Properties.Settings.Default.OBSWebsocketAddress;
-            if (value != "")
+            if (_database.Settings.Connections.OBSAddress != "")
             {
-                txtOBSAddress.Text = value;
+                txtOBSAddress.Text = _database.Settings.Connections.OBSAddress;
                 txtOBSAddress.ForeColor = SystemColors.WindowText;
             }    
             else
             {
                 txtOBSAddress.Text = OBSConnect.DEFAULT_ADDRESS;
             }
-            txtOBSPassword.Text = Properties.Settings.Default.OBSWebsocketPassword;
+            txtOBSPassword.Text = _database.Settings.Connections.OBSPassword;
 
-            value = Properties.Settings.Default.SNIAddress;
-            if (value != "")
+            if (_database.Settings.Connections.SNIAddress != "")
             {
-                txtSNIAddress.Text = value;
+                txtSNIAddress.Text = _database.Settings.Connections.SNIAddress;
                 txtSNIAddress.ForeColor = SystemColors.WindowText;
             }
             else
@@ -101,28 +95,27 @@ namespace ConTroll
 
             UpdateSNIClient();
 
-            txtDistortInterval.Text = Properties.Settings.Default.DistortInterval.ToString();
-            txtDistortDuration.Text = Properties.Settings.Default.DistortDuration.ToString();
-            txtDistortTilt.Text = Properties.Settings.Default.DistortTilt.ToString();
-            txtDistortAdjustX.Text = Properties.Settings.Default.DistortAdjustX.ToString();
-            txtDistortAdjustY.Text = Properties.Settings.Default.DistortAdjustY.ToString();
-            txtDistortColorDuration.Text = Properties.Settings.Default.DistortColorDuration.ToString();
+            txtDistortInterval.Text = _database.Settings.SocialDistortion.Interval.ToString();
+            txtDistortDuration.Text = _database.Settings.SocialDistortion.TransitionDuration.ToString();
+            txtDistortTilt.Text = _database.Settings.SocialDistortion.MaxTilt.ToString();
+            txtDistortAdjustX.Text = _database.Settings.SocialDistortion.AdjustmentX.ToString();
+            txtDistortAdjustY.Text = _database.Settings.SocialDistortion.AdjustmentY.ToString();
+            txtDistortColorDuration.Text = _database.Settings.SocialDistortion.ColorizeDuration.ToString();
 
-            chkDistortMirrorX.CheckState = Properties.Settings.Default.DistortMirrorX;
-            chkDistortMirrorY.CheckState = Properties.Settings.Default.DistortMirrorY;
-            chkDistortRotate.CheckState = Properties.Settings.Default.DistortRotate;
-            chkDistortZoom.CheckState = Properties.Settings.Default.DistortZoom;
-            chkDistortScaleX.CheckState = Properties.Settings.Default.DistortScaleX;
-            chkDistortScaleY.CheckState = Properties.Settings.Default.DistortScaleY;
-            chkDistortShearX.CheckState = Properties.Settings.Default.DistortShearX;
-            chkDistortShearY.CheckState = Properties.Settings.Default.DistortShearY;
-            chkDistortColor.CheckState = Properties.Settings.Default.DistortColor;
+            chkDistortMirrorX.CheckState = (CheckState)_database.Settings.SocialDistortion.MirrorHorizontal;
+            chkDistortMirrorY.CheckState = (CheckState)_database.Settings.SocialDistortion.MirrorVertical;
+            chkDistortRotate.CheckState = (CheckState)_database.Settings.SocialDistortion.Rotate;
+            chkDistortZoom.CheckState = (CheckState)_database.Settings.SocialDistortion.ZoomIn;
+            chkDistortScaleX.CheckState = (CheckState)_database.Settings.SocialDistortion.ScaleHorizontal;
+            chkDistortScaleY.CheckState = (CheckState)_database.Settings.SocialDistortion.ScaleVertical;
+            chkDistortShearX.CheckState = (CheckState)_database.Settings.SocialDistortion.ShearHorizontal;
+            chkDistortShearY.CheckState = (CheckState)_database.Settings.SocialDistortion.ShearVertical;
+            chkDistortColor.CheckState = (CheckState)_database.Settings.SocialDistortion.Colorize;
 
-            value = Properties.Settings.Default.OBSGameSource;
-            if (value != "")
+            if (_database.Settings.SocialDistortion.OBSSourceName != "")
             {
                 var s = new OBSWebsocketDotNet.Types.SourceInfo();
-                s.Name = value;
+                s.Name = _database.Settings.SocialDistortion.OBSSourceName;
                 cboOBSGameSource.Items.Add(s);
                 cboOBSGameSource.SelectedItem = s;
             }
@@ -141,20 +134,6 @@ namespace ConTroll
 
         #region Form Control Events
 
-        private void txtOBSAddress_TextChanged(object sender, EventArgs e)
-        {
-            if (txtOBSAddress.Text != "" && txtOBSAddress.Text != OBSConnect.DEFAULT_ADDRESS)
-            {
-                Properties.Settings.Default.OBSWebsocketAddress = txtOBSAddress.Text;
-            }
-            else
-            {
-                Properties.Settings.Default.OBSWebsocketAddress = "";
-            }
-               
-            Properties.Settings.Default.Save();
-        }
-
         private void txtOBSAddress_Enter(object sender, EventArgs e)
         {
             if (txtOBSAddress.Text == OBSConnect.DEFAULT_ADDRESS)
@@ -170,13 +149,19 @@ namespace ConTroll
             {
                 txtOBSAddress.Text = OBSConnect.DEFAULT_ADDRESS;
                 txtOBSAddress.ForeColor = Color.Silver;
+                _database.Settings.Connections.OBSAddress = "";
             }
+            else
+            {
+                _database.Settings.Connections.OBSAddress = txtOBSAddress.Text;
+            }
+            _database.Update(_database.Settings.Connections);
         }
 
         private void txtOBSPassword_TextChanged(object sender, EventArgs e)
         {
-            Properties.Settings.Default.OBSWebsocketPassword = txtOBSPassword.Text;
-            Properties.Settings.Default.Save();
+            _database.Settings.Connections.OBSPassword = txtOBSPassword.Text;
+            _database.Update(_database.Settings.Connections);
 
             txtOBSPassword.UseSystemPasswordChar = true;
         }
@@ -184,21 +169,6 @@ namespace ConTroll
         private void txtOBSPassword_DoubleClick(object sender, EventArgs e)
         {
             txtOBSPassword.UseSystemPasswordChar = !txtOBSPassword.UseSystemPasswordChar;
-        }
-
-        private void txtSNIAddress_TextChanged(object sender, EventArgs e)
-        {
-            if (txtSNIAddress.Text != "" && txtSNIAddress.Text != SNIClient.GetLocalGrpcAddress())
-            {
-                Properties.Settings.Default.SNIAddress = txtSNIAddress.Text;
-            }
-            else
-            {
-                Properties.Settings.Default.SNIAddress = "";
-            }
-
-            Properties.Settings.Default.Save();
-            UpdateSNIClient();
         }
 
         private void txtSNIAddress_Enter(object sender, EventArgs e)
@@ -216,109 +186,117 @@ namespace ConTroll
             {
                 txtSNIAddress.Text = SNIClient.GetLocalGrpcAddress();
                 txtSNIAddress.ForeColor = Color.Silver;
+                _database.Settings.Connections.SNIAddress = "";
             }
+            else
+            {
+                _database.Settings.Connections.SNIAddress = txtSNIAddress.Text;
+            }
+
+            _database.Update(_database.Settings.Connections);
+            UpdateSNIClient();
         }
 
         private void txtDistortInterval_TextChanged(object sender, EventArgs e)
         {
             uint value = 0;
             UInt32.TryParse(txtDistortInterval.Text, out value);
-            Properties.Settings.Default.DistortInterval = value;
-            Properties.Settings.Default.Save();
+            _database.Settings.SocialDistortion.Interval = value;
+            _database.Update(_database.Settings.SocialDistortion);
         }
 
         private void txtDistortDuration_TextChanged(object sender, EventArgs e)
         {
             uint value = 0;
             UInt32.TryParse(txtDistortDuration.Text, out value);
-            Properties.Settings.Default.DistortDuration = value;
-            Properties.Settings.Default.Save();
+            _database.Settings.SocialDistortion.TransitionDuration = value;
+            _database.Update(_database.Settings.SocialDistortion);
         }
 
         private void txtDistortTilt_TextChanged(object sender, EventArgs e)
         {
             Double value = 0;
             Double.TryParse(txtDistortTilt.Text, out value);
-            Properties.Settings.Default.DistortTilt = value;
-            Properties.Settings.Default.Save();
+            _database.Settings.SocialDistortion.MaxTilt = value;
+            _database.Update(_database.Settings.SocialDistortion);
         }
 
         private void txtDistortAdjustX_TextChanged(object sender, EventArgs e)
         {
             Double value = 0;
             Double.TryParse(txtDistortAdjustX.Text, out value);
-            Properties.Settings.Default.DistortAdjustX = value;
-            Properties.Settings.Default.Save();
+            _database.Settings.SocialDistortion.AdjustmentX = value;
+            _database.Update(_database.Settings.SocialDistortion);
         }
 
         private void txtDistortAdjustY_TextChanged(object sender, EventArgs e)
         {
             Double value = 0;
             Double.TryParse(txtDistortAdjustY.Text, out value);
-            Properties.Settings.Default.DistortAdjustY = value;
-            Properties.Settings.Default.Save();
+            _database.Settings.SocialDistortion.AdjustmentY = value;
+            _database.Update(_database.Settings.SocialDistortion);
         }
 
         private void txtDistortColorDuration_TextChanged(object sender, EventArgs e)
         {
             uint value = 0;
             UInt32.TryParse(txtDistortColorDuration.Text, out value);
-            Properties.Settings.Default.DistortColorDuration = value;
-            Properties.Settings.Default.Save();
+            _database.Settings.SocialDistortion.ColorizeDuration = value;
+            _database.Update(_database.Settings.SocialDistortion);
         }
 
         private void chkDistortMirrorX_CheckStateChanged(object sender, EventArgs e)
         {
-            Properties.Settings.Default.DistortMirrorX = chkDistortMirrorX.CheckState;
-            Properties.Settings.Default.Save();
+            _database.Settings.SocialDistortion.MirrorHorizontal = (DistortionActivity.DistortEnabled)chkDistortMirrorX.CheckState;
+            _database.Update(_database.Settings.SocialDistortion);
         }
 
         private void chkDistortMirrorY_CheckStateChanged(object sender, EventArgs e)
         {
-            Properties.Settings.Default.DistortMirrorY = chkDistortMirrorY.CheckState;
-            Properties.Settings.Default.Save();
+            _database.Settings.SocialDistortion.MirrorVertical = (DistortionActivity.DistortEnabled)chkDistortMirrorY.CheckState;
+            _database.Update(_database.Settings.SocialDistortion);
         }
 
         private void chkDistortRotate_CheckStateChanged(object sender, EventArgs e)
         {
-            Properties.Settings.Default.DistortRotate = chkDistortRotate.CheckState;
-            Properties.Settings.Default.Save();
+            _database.Settings.SocialDistortion.Rotate = (DistortionActivity.DistortEnabled)chkDistortRotate.CheckState;
+            _database.Update(_database.Settings.SocialDistortion);
         }
 
         private void chkDistortZoom_CheckStateChanged(object sender, EventArgs e)
         {
-            Properties.Settings.Default.DistortZoom = chkDistortZoom.CheckState;
-            Properties.Settings.Default.Save();
+            _database.Settings.SocialDistortion.ZoomIn = (DistortionActivity.DistortEnabled)chkDistortZoom.CheckState;
+            _database.Update(_database.Settings.SocialDistortion);
         }
 
         private void chkDistortScaleX_CheckStateChanged(object sender, EventArgs e)
         {
-            Properties.Settings.Default.DistortScaleX = chkDistortScaleX.CheckState;
-            Properties.Settings.Default.Save();
+            _database.Settings.SocialDistortion.ScaleHorizontal = (DistortionActivity.DistortEnabled)chkDistortScaleX.CheckState;
+            _database.Update(_database.Settings.SocialDistortion);
         }
 
         private void chkDistortScaleY_CheckStateChanged(object sender, EventArgs e)
         {
-            Properties.Settings.Default.DistortScaleY = chkDistortScaleY.CheckState;
-            Properties.Settings.Default.Save();
+            _database.Settings.SocialDistortion.ScaleVertical = (DistortionActivity.DistortEnabled)chkDistortScaleY.CheckState;
+            _database.Update(_database.Settings.SocialDistortion);
         }
 
         private void chkDistortShearX_CheckStateChanged(object sender, EventArgs e)
         {
-            Properties.Settings.Default.DistortShearX = chkDistortShearX.CheckState;
-            Properties.Settings.Default.Save();
+            _database.Settings.SocialDistortion.ShearHorizontal = (DistortionActivity.DistortEnabled)chkDistortShearX.CheckState;
+            _database.Update(_database.Settings.SocialDistortion);
         }
 
         private void chkDistortShearY_CheckStateChanged(object sender, EventArgs e)
         {
-            Properties.Settings.Default.DistortShearY = chkDistortShearY.CheckState;
-            Properties.Settings.Default.Save();
+            _database.Settings.SocialDistortion.ShearVertical = (DistortionActivity.DistortEnabled)chkDistortShearY.CheckState;
+            _database.Update(_database.Settings.SocialDistortion);
         }
 
         private void chkDistortColor_CheckStateChanged(object sender, EventArgs e)
         {
-            Properties.Settings.Default.DistortColor = chkDistortColor.CheckState;
-            Properties.Settings.Default.Save();
+            _database.Settings.SocialDistortion.Colorize = (DistortionActivity.DistortEnabled)chkDistortColor.CheckState;
+            _database.Update(_database.Settings.SocialDistortion);
         }
 
         private void chkDistortMirrorX_Click(object sender, EventArgs e)
@@ -425,11 +403,11 @@ namespace ConTroll
                     }
                 }
 
-                if (Properties.Settings.Default.OBSGameSource != "")
+                if (_database.Settings.SocialDistortion.OBSSourceName != "")
                 {
                     foreach (OBSWebsocketDotNet.Types.SourceInfo s in cboOBSGameSource.Items)
                     {
-                        if (s.Name == Properties.Settings.Default.OBSGameSource)
+                        if (s.Name == _database.Settings.SocialDistortion.OBSSourceName)
                         {
                             cboOBSGameSource.SelectedItem = s;
                             break;
@@ -444,8 +422,8 @@ namespace ConTroll
             if (cboOBSGameSource.SelectedIndex != 0)
             {
                 OBSWebsocketDotNet.Types.SourceInfo item = (OBSWebsocketDotNet.Types.SourceInfo)cboOBSGameSource.SelectedItem;
-                Properties.Settings.Default.OBSGameSource = item.Name;
-                Properties.Settings.Default.Save();
+                _database.Settings.SocialDistortion.OBSSourceName = item.Name;
+                _database.Update(_database.Settings.SocialDistortion);
             }
         }
         private void btnSNIStatus_MouseHover(object sender, EventArgs e)
@@ -485,13 +463,13 @@ namespace ConTroll
 
         public void UpdateSNIClient()
         {
-            if (Properties.Settings.Default.SNIAddress == "")
+            if (_database.Settings.Connections.SNIAddress == "")
             {
                 _sni = new SNIClient(SNIClient.DEFAULT_IP, SNIClient.GetGrpcPort());
             }
-            else
+            else if (_database.Settings.Connections.SNIAddress.Contains(":"))
             {
-                string[] address = Properties.Settings.Default.SNIAddress.Split(':');
+                string[] address = _database.Settings.Connections.SNIAddress.Split(':');
                 _sni = new SNIClient(address[address.Length - 2], int.Parse(address[address.Length - 1]));
             }
         }

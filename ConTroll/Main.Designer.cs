@@ -37,6 +37,9 @@ namespace ConTroll
             this.btnActivityDistortion = new System.Windows.Forms.Button();
             this.tabConfig = new System.Windows.Forms.TabPage();
             this.grpDistortion = new System.Windows.Forms.GroupBox();
+            this.lblDistortColorDuration = new System.Windows.Forms.Label();
+            this.txtDistortColorDuration = new System.Windows.Forms.TextBox();
+            this.chkDistortColor = new System.Windows.Forms.CheckBox();
             this.chkDistortShearY = new System.Windows.Forms.CheckBox();
             this.chkDistortShearX = new System.Windows.Forms.CheckBox();
             this.chkDistortScaleY = new System.Windows.Forms.CheckBox();
@@ -76,9 +79,6 @@ namespace ConTroll
             this.btnOBSStatus = new System.Windows.Forms.ToolStripDropDownButton();
             this.lblOBSStatus = new System.Windows.Forms.ToolStripStatusLabel();
             this.tooltip = new System.Windows.Forms.ToolTip(this.components);
-            this.chkDistortColor = new System.Windows.Forms.CheckBox();
-            this.lblDistortColorDuration = new System.Windows.Forms.Label();
-            this.txtDistortColorDuration = new System.Windows.Forms.TextBox();
             this.tabbarMain.SuspendLayout();
             this.tabMain.SuspendLayout();
             this.tabConfig.SuspendLayout();
@@ -175,6 +175,38 @@ namespace ConTroll
             this.grpDistortion.TabIndex = 2;
             this.grpDistortion.TabStop = false;
             this.grpDistortion.Text = "Social Distortion";
+            // 
+            // lblDistortColorDuration
+            // 
+            this.lblDistortColorDuration.AutoSize = true;
+            this.lblDistortColorDuration.Location = new System.Drawing.Point(2, 140);
+            this.lblDistortColorDuration.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.lblDistortColorDuration.Name = "lblDistortColorDuration";
+            this.lblDistortColorDuration.Size = new System.Drawing.Size(77, 13);
+            this.lblDistortColorDuration.TabIndex = 10;
+            this.lblDistortColorDuration.Text = "Color Duration:";
+            // 
+            // txtDistortColorDuration
+            // 
+            this.txtDistortColorDuration.ForeColor = System.Drawing.SystemColors.WindowText;
+            this.txtDistortColorDuration.Location = new System.Drawing.Point(81, 137);
+            this.txtDistortColorDuration.Name = "txtDistortColorDuration";
+            this.txtDistortColorDuration.Size = new System.Drawing.Size(56, 20);
+            this.txtDistortColorDuration.TabIndex = 11;
+            this.txtDistortColorDuration.TextChanged += new System.EventHandler(this.txtDistortColorDuration_TextChanged);
+            // 
+            // chkDistortColor
+            // 
+            this.chkDistortColor.AutoSize = true;
+            this.chkDistortColor.Location = new System.Drawing.Point(150, 139);
+            this.chkDistortColor.Name = "chkDistortColor";
+            this.chkDistortColor.Size = new System.Drawing.Size(63, 17);
+            this.chkDistortColor.TabIndex = 31;
+            this.chkDistortColor.Text = "Colorize";
+            this.chkDistortColor.ThreeState = true;
+            this.chkDistortColor.UseVisualStyleBackColor = true;
+            this.chkDistortColor.CheckStateChanged += new System.EventHandler(this.chkDistortColor_CheckStateChanged);
+            this.chkDistortColor.Click += new System.EventHandler(this.chkDistortColor_Click);
             // 
             // chkDistortShearY
             // 
@@ -460,7 +492,6 @@ namespace ConTroll
             this.txtSNIAddress.Name = "txtSNIAddress";
             this.txtSNIAddress.Size = new System.Drawing.Size(175, 20);
             this.txtSNIAddress.TabIndex = 12;
-            this.txtSNIAddress.TextChanged += new System.EventHandler(this.txtSNIAddress_TextChanged);
             this.txtSNIAddress.Enter += new System.EventHandler(this.txtSNIAddress_Enter);
             this.txtSNIAddress.Leave += new System.EventHandler(this.txtSNIAddress_Leave);
             // 
@@ -495,7 +526,6 @@ namespace ConTroll
             this.txtOBSAddress.Size = new System.Drawing.Size(175, 20);
             this.txtOBSAddress.TabIndex = 0;
             this.txtOBSAddress.Text = "ws://127.0.0.1:4444";
-            this.txtOBSAddress.TextChanged += new System.EventHandler(this.txtOBSAddress_TextChanged);
             this.txtOBSAddress.Enter += new System.EventHandler(this.txtOBSAddress_Enter);
             this.txtOBSAddress.Leave += new System.EventHandler(this.txtOBSAddress_Leave);
             // 
@@ -578,38 +608,6 @@ namespace ConTroll
             // tooltip
             // 
             this.tooltip.ShowAlways = true;
-            // 
-            // chkDistortColor
-            // 
-            this.chkDistortColor.AutoSize = true;
-            this.chkDistortColor.Location = new System.Drawing.Point(150, 139);
-            this.chkDistortColor.Name = "chkDistortColor";
-            this.chkDistortColor.Size = new System.Drawing.Size(63, 17);
-            this.chkDistortColor.TabIndex = 31;
-            this.chkDistortColor.Text = "Colorize";
-            this.chkDistortColor.ThreeState = true;
-            this.chkDistortColor.UseVisualStyleBackColor = true;
-            this.chkDistortColor.CheckStateChanged += new System.EventHandler(this.chkDistortColor_CheckStateChanged);
-            this.chkDistortColor.Click += new System.EventHandler(this.chkDistortColor_Click);
-            // 
-            // lblDistortColorDuration
-            // 
-            this.lblDistortColorDuration.AutoSize = true;
-            this.lblDistortColorDuration.Location = new System.Drawing.Point(2, 140);
-            this.lblDistortColorDuration.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.lblDistortColorDuration.Name = "lblDistortColorDuration";
-            this.lblDistortColorDuration.Size = new System.Drawing.Size(77, 13);
-            this.lblDistortColorDuration.TabIndex = 10;
-            this.lblDistortColorDuration.Text = "Color Duration:";
-            // 
-            // txtDistortColorDuration
-            // 
-            this.txtDistortColorDuration.ForeColor = System.Drawing.SystemColors.WindowText;
-            this.txtDistortColorDuration.Location = new System.Drawing.Point(81, 137);
-            this.txtDistortColorDuration.Name = "txtDistortColorDuration";
-            this.txtDistortColorDuration.Size = new System.Drawing.Size(56, 20);
-            this.txtDistortColorDuration.TabIndex = 11;
-            this.txtDistortColorDuration.TextChanged += new System.EventHandler(this.txtDistortColorDuration_TextChanged);
             // 
             // Main
             // 

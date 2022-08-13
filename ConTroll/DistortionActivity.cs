@@ -42,8 +42,10 @@ namespace ConTroll
         private bool MirrorModeShearedX = false;
         private bool MirrorModeShearedY = false;
         private bool MirrorModeColorized = false;
-        private double MirrorModeTilt = Properties.Settings.Default.DistortTilt;
+        private double MirrorModeTilt = 0;
         private bool MirrorModeTiltDir = false;
+
+        private Config.SocialDistortion Settings;
 
         private Task Process;
         private bool IsCancelPending = false;
@@ -60,21 +62,23 @@ namespace ConTroll
             _main = main;
             _obs = main._obs;
             _sni = main._sni;
+            Settings = _main._database.Settings.SocialDistortion;
+            MirrorModeTilt = Settings.MaxTilt;
         }
 
         protected override bool CanPerformAction(ActionArgs args)
         {
             DistortionActionArgs actionArgs = new DistortionActionArgs(args);
             if (!actionArgs.ShouldReset
-                && Properties.Settings.Default.DistortMirrorX == CheckState.Unchecked
-                && Properties.Settings.Default.DistortMirrorY == CheckState.Unchecked
-                && Properties.Settings.Default.DistortRotate == CheckState.Unchecked
-                && Properties.Settings.Default.DistortZoom == CheckState.Unchecked
-                && Properties.Settings.Default.DistortScaleX == CheckState.Unchecked
-                && Properties.Settings.Default.DistortScaleY == CheckState.Unchecked
-                && Properties.Settings.Default.DistortShearX == CheckState.Unchecked
-                && Properties.Settings.Default.DistortShearY == CheckState.Unchecked
-                && Properties.Settings.Default.DistortColor == CheckState.Unchecked)
+                && Settings.MirrorHorizontal == DistortEnabled.Disabled
+                && Settings.MirrorVertical == DistortEnabled.Disabled
+                && Settings.Rotate == DistortEnabled.Disabled
+                && Settings.ZoomIn == DistortEnabled.Disabled
+                && Settings.ScaleHorizontal == DistortEnabled.Disabled
+                && Settings.ScaleVertical == DistortEnabled.Disabled
+                && Settings.ShearHorizontal == DistortEnabled.Disabled
+                && Settings.ShearVertical == DistortEnabled.Disabled
+                && Settings.Colorize == DistortEnabled.Disabled)
             {
                 this.Message = "No Social Distortion effects are enabled";
                 return false;
@@ -86,13 +90,13 @@ namespace ConTroll
                 return false;
             }
 
-            if (Properties.Settings.Default.OBSGameSource == "")
+            if (Settings.OBSSourceName == "")
             {
                 this.Message = "No OBS Game Source is selected";
                 return false;
             }
 
-            if (MirrorModeFlippedX || MirrorModeFlippedY || MirrorModeRotated || Properties.Settings.Default.DistortMirrorX != CheckState.Unchecked || Properties.Settings.Default.DistortMirrorY != CheckState.Unchecked || Properties.Settings.Default.DistortRotate != CheckState.Unchecked)
+            if (MirrorModeFlippedX || MirrorModeFlippedY || MirrorModeRotated || Settings.MirrorHorizontal != DistortEnabled.Disabled || Settings.MirrorVertical != DistortEnabled.Disabled || Settings.Rotate != DistortEnabled.Disabled)
             {
                 if (_sni == null || _sni.Status == SNIClient.DeviceState.SNIOffline || _sni.Status == SNIClient.DeviceState.NoDevice)
                 {
@@ -123,7 +127,7 @@ namespace ConTroll
 
             try
             {
-                _obs._obs.GetSourceSettings(Properties.Settings.Default.OBSGameSource);
+                _obs._obs.GetSourceSettings(Settings.OBSSourceName);
             }
             catch (ErrorResponseException ex)
             {
@@ -206,7 +210,7 @@ namespace ConTroll
                 {
                     UpdateStatus(DistortStatus.Running);
 
-                    uint timeout = Properties.Settings.Default.DistortInterval;
+                    uint timeout = Settings.Interval;
                     while (timeout > 0 && !IsCancelPending)
                     {
                         System.Threading.Thread.Sleep(1000);
@@ -228,7 +232,7 @@ namespace ConTroll
             DistortionActionArgs actionArgs = new DistortionActionArgs(args);
 
             bool InputsFlipped = MirrorModeFlippedX || MirrorModeFlippedY || MirrorModeRotated;
-            bool InputsMightFlip = Properties.Settings.Default.DistortMirrorX != CheckState.Unchecked || Properties.Settings.Default.DistortMirrorY != CheckState.Unchecked || Properties.Settings.Default.DistortRotate != CheckState.Unchecked;
+            bool InputsMightFlip = Settings.MirrorHorizontal != DistortEnabled.Disabled || Settings.MirrorVertical != DistortEnabled.Disabled || Settings.Rotate != DistortEnabled.Disabled;
 
             if (!actionArgs.ShouldReset && _sni != null && (InputsFlipped || InputsMightFlip))
             {
@@ -252,7 +256,7 @@ namespace ConTroll
                 //add filters if they don't exist
                 try
                 {
-                    _obs._obs.GetSourceFilterInfo(Properties.Settings.Default.OBSGameSource, DISTORT_FILTER);
+                    _obs._obs.GetSourceFilterInfo(Settings.OBSSourceName, DISTORT_FILTER);
                 }
                 catch (ErrorResponseException ex)
                 {
@@ -260,12 +264,12 @@ namespace ConTroll
                     OBSConnect.AddOrReplaceProperty(settings, "Camera.FieldOfView", 90.0);
                     OBSConnect.AddOrReplaceProperty(settings, "Camera.Mode", 1);
 
-                    _obs._obs.AddFilterToSource(Properties.Settings.Default.OBSGameSource, DISTORT_FILTER, "streamfx-filter-transform", settings);
+                    _obs._obs.AddFilterToSource(Settings.OBSSourceName, DISTORT_FILTER, "streamfx-filter-transform", settings);
                 }
 
                 try
                 {
-                    _obs._obs.GetSourceFilterInfo(Properties.Settings.Default.OBSGameSource, DISTORT_MOVE_FILTER);
+                    _obs._obs.GetSourceFilterInfo(Settings.OBSSourceName, DISTORT_MOVE_FILTER);
                 }
                 catch (ErrorResponseException ex)
                 {
@@ -275,13 +279,13 @@ namespace ConTroll
                     OBSConnect.AddOrReplaceProperty(settings, "value_type", 2);
                     OBSConnect.AddOrReplaceProperty(settings, "end_delay", 100);
 
-                    _obs._obs.AddFilterToSource(Properties.Settings.Default.OBSGameSource, DISTORT_MOVE_FILTER, "move_value_filter", settings);
-                    _obs._obs.GetSourceFilterInfo(Properties.Settings.Default.OBSGameSource, DISTORT_MOVE_FILTER);
+                    _obs._obs.AddFilterToSource(Settings.OBSSourceName, DISTORT_MOVE_FILTER, "move_value_filter", settings);
+                    _obs._obs.GetSourceFilterInfo(Settings.OBSSourceName, DISTORT_MOVE_FILTER);
                 }
 
                 try
                 {
-                    _obs._obs.GetSourceFilterInfo(Properties.Settings.Default.OBSGameSource, DISTORT_TILT_FILTER);
+                    _obs._obs.GetSourceFilterInfo(Settings.OBSSourceName, DISTORT_TILT_FILTER);
                 }
                 catch (ErrorResponseException ex)
                 {
@@ -293,24 +297,24 @@ namespace ConTroll
                     OBSConnect.AddOrReplaceProperty(settings, "easing_match", 2);
                     OBSConnect.AddOrReplaceProperty(settings, "easing_function_match", 10);
 
-                    _obs._obs.AddFilterToSource(Properties.Settings.Default.OBSGameSource, DISTORT_TILT_FILTER, "move_value_filter", settings);
+                    _obs._obs.AddFilterToSource(Settings.OBSSourceName, DISTORT_TILT_FILTER, "move_value_filter", settings);
                 }
 
                 try
                 {
-                    var b = _obs._obs.GetSourceFilterInfo(Properties.Settings.Default.OBSGameSource, DISTORT_COLOR_FILTER);
+                    var b = _obs._obs.GetSourceFilterInfo(Settings.OBSSourceName, DISTORT_COLOR_FILTER);
                 }
                 catch (ErrorResponseException ex)
                 {
                     JObject settings = new JObject();
                     OBSConnect.AddOrReplaceProperty(settings, "hue_shift", 0.0);
 
-                    _obs._obs.AddFilterToSource(Properties.Settings.Default.OBSGameSource, DISTORT_COLOR_FILTER, "color_filter", settings);
+                    _obs._obs.AddFilterToSource(Settings.OBSSourceName, DISTORT_COLOR_FILTER, "color_filter", settings);
                 }
 
                 try
                 {
-                    _obs._obs.GetSourceFilterInfo(Properties.Settings.Default.OBSGameSource, DISTORT_COLOR_MOVE_FILTER);
+                    _obs._obs.GetSourceFilterInfo(Settings.OBSSourceName, DISTORT_COLOR_MOVE_FILTER);
                 }
                 catch (ErrorResponseException ex)
                 {
@@ -321,15 +325,15 @@ namespace ConTroll
                     OBSConnect.AddOrReplaceProperty(settings, "setting_name", "hue_shift");
                     OBSConnect.AddOrReplaceProperty(settings, "setting_float", 180.0);
                     OBSConnect.AddOrReplaceProperty(settings, "easing_match", 0);
-                    OBSConnect.AddOrReplaceProperty(settings, "duration", Properties.Settings.Default.DistortColorDuration);
+                    OBSConnect.AddOrReplaceProperty(settings, "duration", Settings.ColorizeDuration);
 
-                    _obs._obs.AddFilterToSource(Properties.Settings.Default.OBSGameSource, DISTORT_COLOR_MOVE_FILTER, "move_value_filter", settings);
-                    _obs._obs.GetSourceFilterInfo(Properties.Settings.Default.OBSGameSource, DISTORT_COLOR_MOVE_FILTER);
+                    _obs._obs.AddFilterToSource(Settings.OBSSourceName, DISTORT_COLOR_MOVE_FILTER, "move_value_filter", settings);
+                    _obs._obs.GetSourceFilterInfo(Settings.OBSSourceName, DISTORT_COLOR_MOVE_FILTER);
                 }
 
                 try
                 {
-                    _obs._obs.GetSourceFilterInfo(Properties.Settings.Default.OBSGameSource, DISTORT_COLOR_MOVE2_FILTER);
+                    _obs._obs.GetSourceFilterInfo(Settings.OBSSourceName, DISTORT_COLOR_MOVE2_FILTER);
                 }
                 catch (ErrorResponseException ex)
                 {
@@ -343,13 +347,13 @@ namespace ConTroll
                     OBSConnect.AddOrReplaceProperty(settings, "easing_match", 0);
                     OBSConnect.AddOrReplaceProperty(settings, "next_move", DISTORT_COLOR_MOVE_FILTER);
 
-                    _obs._obs.AddFilterToSource(Properties.Settings.Default.OBSGameSource, DISTORT_COLOR_MOVE2_FILTER, "move_value_filter", settings);
-                    _obs._obs.GetSourceFilterInfo(Properties.Settings.Default.OBSGameSource, DISTORT_COLOR_MOVE2_FILTER);
+                    _obs._obs.AddFilterToSource(Settings.OBSSourceName, DISTORT_COLOR_MOVE2_FILTER, "move_value_filter", settings);
+                    _obs._obs.GetSourceFilterInfo(Settings.OBSSourceName, DISTORT_COLOR_MOVE2_FILTER);
                 }
 
-                FilterSettings f = _obs._obs.GetSourceFilterInfo(Properties.Settings.Default.OBSGameSource, DISTORT_MOVE_FILTER);
+                FilterSettings f = _obs._obs.GetSourceFilterInfo(Settings.OBSSourceName, DISTORT_MOVE_FILTER);
                 OBSConnect.AddOrReplaceProperty(f.Settings, "next_move", DISTORT_TILT_FILTER);
-                _obs._obs.SetSourceFilterSettings(Properties.Settings.Default.OBSGameSource, DISTORT_MOVE_FILTER, f.Settings);
+                _obs._obs.SetSourceFilterSettings(Settings.OBSSourceName, DISTORT_MOVE_FILTER, f.Settings);
 
                 //reset mirror mode
                 MirrorModeZoomed = false;
@@ -360,38 +364,38 @@ namespace ConTroll
                 MirrorModeScaledY = false;
                 MirrorModeShearedX = false;
                 MirrorModeShearedY = false;
-                MirrorModeColorized = Properties.Settings.Default.DistortColor == CheckState.Checked;
+                MirrorModeColorized = Settings.Colorize == DistortEnabled.AlwaysOn;
                 MirrorModeTilt = 0.0;
             }
             else
             {
-                _obs._obs.SetSourceFilterVisibility(Properties.Settings.Default.OBSGameSource, DISTORT_FILTER, true);
-                _obs._obs.SetSourceFilterVisibility(Properties.Settings.Default.OBSGameSource, DISTORT_COLOR_FILTER, true);
+                _obs._obs.SetSourceFilterVisibility(Settings.OBSSourceName, DISTORT_FILTER, true);
+                _obs._obs.SetSourceFilterVisibility(Settings.OBSSourceName, DISTORT_COLOR_FILTER, true);
                 List<DistortEffect> effects = new List<DistortEffect>();
-                if (Properties.Settings.Default.DistortMirrorX == CheckState.Indeterminate) effects.Add(DistortEffect.MirrorX);
-                else MirrorModeFlippedX = Properties.Settings.Default.DistortMirrorX == CheckState.Checked;
-                if (Properties.Settings.Default.DistortMirrorY == CheckState.Indeterminate) effects.Add(DistortEffect.MirrorY);
-                else MirrorModeFlippedY = Properties.Settings.Default.DistortMirrorY == CheckState.Checked;
-                if (Properties.Settings.Default.DistortRotate == CheckState.Indeterminate) effects.Add(DistortEffect.Rotate);
-                else MirrorModeRotated = Properties.Settings.Default.DistortRotate == CheckState.Checked;
-                if (Properties.Settings.Default.DistortZoom == CheckState.Indeterminate) effects.Add(DistortEffect.Zoom);
-                else MirrorModeZoomed = Properties.Settings.Default.DistortZoom == CheckState.Checked;
-                if (Properties.Settings.Default.DistortScaleX == CheckState.Indeterminate) effects.Add(DistortEffect.ScaleX);
-                else MirrorModeScaledX = Properties.Settings.Default.DistortScaleX == CheckState.Checked;
-                if (Properties.Settings.Default.DistortScaleY == CheckState.Indeterminate) effects.Add(DistortEffect.ScaleY);
-                else MirrorModeScaledY = Properties.Settings.Default.DistortScaleY == CheckState.Checked;
-                if (Properties.Settings.Default.DistortShearX == CheckState.Indeterminate) effects.Add(DistortEffect.ShearX);
-                else MirrorModeShearedX = Properties.Settings.Default.DistortShearX == CheckState.Checked;
-                if (Properties.Settings.Default.DistortShearY == CheckState.Indeterminate) effects.Add(DistortEffect.ShearY);
-                else MirrorModeShearedY = Properties.Settings.Default.DistortShearY == CheckState.Checked;
-                if (Properties.Settings.Default.DistortColor == CheckState.Indeterminate) effects.Add(DistortEffect.Colorize);
-                else MirrorModeColorized = Properties.Settings.Default.DistortColor == CheckState.Checked;
+                if (Settings.MirrorHorizontal == DistortEnabled.Random) effects.Add(DistortEffect.MirrorX);
+                else MirrorModeFlippedX = Settings.MirrorHorizontal == DistortEnabled.AlwaysOn;
+                if (Settings.MirrorVertical == DistortEnabled.Random) effects.Add(DistortEffect.MirrorY);
+                else MirrorModeFlippedY = Settings.MirrorVertical == DistortEnabled.AlwaysOn;
+                if (Settings.Rotate == DistortEnabled.Random) effects.Add(DistortEffect.Rotate);
+                else MirrorModeRotated = Settings.Rotate == DistortEnabled.AlwaysOn;
+                if (Settings.ZoomIn == DistortEnabled.Random) effects.Add(DistortEffect.Zoom);
+                else MirrorModeZoomed = Settings.ZoomIn == DistortEnabled.AlwaysOn;
+                if (Settings.ScaleHorizontal == DistortEnabled.Random) effects.Add(DistortEffect.ScaleX);
+                else MirrorModeScaledX = Settings.ScaleHorizontal == DistortEnabled.AlwaysOn;
+                if (Settings.ScaleVertical == DistortEnabled.Random) effects.Add(DistortEffect.ScaleY);
+                else MirrorModeScaledY = Settings.ScaleVertical == DistortEnabled.AlwaysOn;
+                if (Settings.ShearHorizontal == DistortEnabled.Random) effects.Add(DistortEffect.ShearX);
+                else MirrorModeShearedX = Settings.ShearHorizontal == DistortEnabled.AlwaysOn;
+                if (Settings.ShearVertical == DistortEnabled.Random) effects.Add(DistortEffect.ShearY);
+                else MirrorModeShearedY = Settings.ShearVertical == DistortEnabled.AlwaysOn;
+                if (Settings.Colorize == DistortEnabled.Random) effects.Add(DistortEffect.Colorize);
+                else MirrorModeColorized = Settings.Colorize == DistortEnabled.AlwaysOn;
 
                 if (effects.Count > 0)
                 {
                     //play sound
                     Random r = new Random();
-                    if (Properties.Settings.Default.DistortInterval >= 10)
+                    if (Settings.Interval >= 10)
                     {
                         int i = r.Next(0, DistortSounds.Length);
                         if (DistortSounds[i].Stream != null)
@@ -442,15 +446,15 @@ namespace ConTroll
                     {
                         MirrorModeTiltDir = r.Next() % 2 == 0;
                     }
-                    MirrorModeTilt = r.NextDouble() * Properties.Settings.Default.DistortTilt;
+                    MirrorModeTilt = r.NextDouble() * Settings.MaxTilt;
                 }
             }
 
             //set animation destination settings to OBS filter
-            FilterSettings filter = _obs._obs.GetSourceFilterInfo(Properties.Settings.Default.OBSGameSource, DISTORT_MOVE_FILTER);
-            OBSConnect.AddOrReplaceProperty(filter.Settings, "duration", Properties.Settings.Default.DistortDuration);
-            OBSConnect.AddOrReplaceProperty(filter.Settings, "Position.X", MirrorModeFlippedX ^ MirrorModeRotated ? Properties.Settings.Default.DistortAdjustX : 0.0);
-            OBSConnect.AddOrReplaceProperty(filter.Settings, "Position.Y", MirrorModeFlippedY ^ MirrorModeRotated ? Properties.Settings.Default.DistortAdjustY : 0.0);
+            FilterSettings filter = _obs._obs.GetSourceFilterInfo(Settings.OBSSourceName, DISTORT_MOVE_FILTER);
+            OBSConnect.AddOrReplaceProperty(filter.Settings, "duration", Settings.TransitionDuration);
+            OBSConnect.AddOrReplaceProperty(filter.Settings, "Position.X", MirrorModeFlippedX ^ MirrorModeRotated ? Settings.AdjustmentX : 0.0);
+            OBSConnect.AddOrReplaceProperty(filter.Settings, "Position.Y", MirrorModeFlippedY ^ MirrorModeRotated ? Settings.AdjustmentY : 0.0);
             OBSConnect.AddOrReplaceProperty(filter.Settings, "Position.Z", MirrorModeZoomed ? 33.0 : 0.0);
             OBSConnect.AddOrReplaceProperty(filter.Settings, "Scale.X", MirrorModeScaledX ? 66.0 : 100.0);
             OBSConnect.AddOrReplaceProperty(filter.Settings, "Scale.Y", MirrorModeScaledY ? 66.0 : 100.0);
@@ -459,9 +463,9 @@ namespace ConTroll
             OBSConnect.AddOrReplaceProperty(filter.Settings, "Rotation.X", MirrorModeFlippedY ? 180.0 : 0.0);
             OBSConnect.AddOrReplaceProperty(filter.Settings, "Rotation.Y", MirrorModeFlippedX ? 180.0 : 0.0);
             OBSConnect.AddOrReplaceProperty(filter.Settings, "Rotation.Z", MirrorModeRotated ? (MirrorModeTiltDir ? -180.0 : 180.0) : 0.0);
-            _obs._obs.SetSourceFilterSettings(Properties.Settings.Default.OBSGameSource, DISTORT_MOVE_FILTER, filter.Settings);
+            _obs._obs.SetSourceFilterSettings(Settings.OBSSourceName, DISTORT_MOVE_FILTER, filter.Settings);
 
-            FilterSettings filter2 = _obs._obs.GetSourceFilterInfo(Properties.Settings.Default.OBSGameSource, DISTORT_TILT_FILTER);
+            FilterSettings filter2 = _obs._obs.GetSourceFilterInfo(Settings.OBSSourceName, DISTORT_TILT_FILTER);
             OBSConnect.AddOrReplaceProperty(filter2.Settings, "Position.X", filter.Settings.Property("Position.X").Value);
             OBSConnect.AddOrReplaceProperty(filter2.Settings, "Position.Y", filter.Settings.Property("Position.Y").Value);
             OBSConnect.AddOrReplaceProperty(filter2.Settings, "Position.Z", filter.Settings.Property("Position.Z").Value);
@@ -472,16 +476,16 @@ namespace ConTroll
             OBSConnect.AddOrReplaceProperty(filter2.Settings, "Rotation.X", filter.Settings.Property("Rotation.X").Value);
             OBSConnect.AddOrReplaceProperty(filter2.Settings, "Rotation.Y", filter.Settings.Property("Rotation.Y").Value);
             OBSConnect.AddOrReplaceProperty(filter2.Settings, "Rotation.Z", (Double)filter.Settings.Property("Rotation.Z").Value + (MirrorModeTilt * (MirrorModeTiltDir ? 1 : -1)));
-            _obs._obs.SetSourceFilterSettings(Properties.Settings.Default.OBSGameSource, DISTORT_TILT_FILTER, filter2.Settings);
+            _obs._obs.SetSourceFilterSettings(Settings.OBSSourceName, DISTORT_TILT_FILTER, filter2.Settings);
 
-            _obs._obs.SetSourceFilterVisibility(Properties.Settings.Default.OBSGameSource, DISTORT_MOVE_FILTER, true);
+            _obs._obs.SetSourceFilterVisibility(Settings.OBSSourceName, DISTORT_MOVE_FILTER, true);
 
-            filter = _obs._obs.GetSourceFilterInfo(Properties.Settings.Default.OBSGameSource, DISTORT_COLOR_MOVE_FILTER);
-            OBSConnect.AddOrReplaceProperty(filter.Settings, "duration", Properties.Settings.Default.DistortColorDuration);
+            filter = _obs._obs.GetSourceFilterInfo(Settings.OBSSourceName, DISTORT_COLOR_MOVE_FILTER);
+            OBSConnect.AddOrReplaceProperty(filter.Settings, "duration", Settings.ColorizeDuration);
             OBSConnect.AddOrReplaceProperty(filter.Settings, "hue_shift", MirrorModeColorized ? 180.0 : 0.0);
             OBSConnect.AddOrReplaceProperty(filter.Settings, "next_move", MirrorModeColorized ? DISTORT_COLOR_MOVE2_FILTER : "");
-            _obs._obs.SetSourceFilterSettings(Properties.Settings.Default.OBSGameSource, DISTORT_COLOR_MOVE_FILTER, filter.Settings);
-            _obs._obs.SetSourceFilterVisibility(Properties.Settings.Default.OBSGameSource, DISTORT_COLOR_MOVE_FILTER, true);
+            _obs._obs.SetSourceFilterSettings(Settings.OBSSourceName, DISTORT_COLOR_MOVE_FILTER, filter.Settings);
+            _obs._obs.SetSourceFilterVisibility(Settings.OBSSourceName, DISTORT_COLOR_MOVE_FILTER, true);
 
             //change inputs
             if (_sni != null && (_sni.Status == SNIClient.DeviceState.DeviceRunning || _sni.Status == SNIClient.DeviceState.DeviceRunningLive) && (InputsFlipped || InputsMightFlip))
@@ -505,7 +509,7 @@ namespace ConTroll
                         value = 0;
                         break;
                 }
-                System.Threading.Thread.Sleep((int)Properties.Settings.Default.DistortDuration / 2 + 100);
+                System.Threading.Thread.Sleep((int)Settings.TransitionDuration / 2 + 100);
                 //if (value > 0)
                 //{
                 //    _emu.Freeze(0x7f50cb, value);
@@ -521,9 +525,9 @@ namespace ConTroll
             //disable mirror mode
             if (actionArgs.ShouldReset)
             {
-                System.Threading.Thread.Sleep((int)Properties.Settings.Default.DistortDuration + 500);
-                _obs._obs.SetSourceFilterVisibility(Properties.Settings.Default.OBSGameSource, DISTORT_FILTER, false);
-                _obs._obs.SetSourceFilterVisibility(Properties.Settings.Default.OBSGameSource, DISTORT_COLOR_FILTER, false);
+                System.Threading.Thread.Sleep((int)Settings.TransitionDuration + 500);
+                _obs._obs.SetSourceFilterVisibility(Settings.OBSSourceName, DISTORT_FILTER, false);
+                _obs._obs.SetSourceFilterVisibility(Settings.OBSSourceName, DISTORT_COLOR_FILTER, false);
             }
 
             return true;
@@ -590,6 +594,13 @@ namespace ConTroll
             Stopped = 0,
             Running = 1,
             Busy = 2
+        }
+
+        public enum DistortEnabled
+        {
+            Disabled = 0,
+            AlwaysOn = 1,
+            Random = 2
         }
     }
 
