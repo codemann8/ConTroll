@@ -231,6 +231,8 @@ namespace ConTroll
         {
             DistortionActionArgs actionArgs = new DistortionActionArgs(args);
 
+            MirrorModeTilt = Settings.MaxTilt;
+
             bool InputsFlipped = MirrorModeFlippedX || MirrorModeFlippedY || MirrorModeRotated;
             bool InputsMightFlip = Settings.MirrorHorizontal != DistortEnabled.Disabled || Settings.MirrorVertical != DistortEnabled.Disabled || Settings.Rotate != DistortEnabled.Disabled;
 
