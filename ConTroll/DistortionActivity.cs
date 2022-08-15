@@ -198,9 +198,6 @@ namespace ConTroll
                 System.Threading.Thread.CurrentThread.Name = "DistortionWorker";
             }
 
-            //byte[] raw = _sni.Read(0, 0x10000);
-            //System.IO.File.WriteAllBytes(@"L:\_Work\Zelda\test-out.bin", raw);
-
             DistortionActionArgs args = new DistortionActionArgs(true);
             if (DoAction(args))
             {
